@@ -1,5 +1,4 @@
 ﻿using Product_Elective.Properties;
-using Product_Elective.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,13 +16,14 @@ namespace ACOTIN_POS_APPLICATION
 {
     public partial class Save_Product : Form
     {
-        ProductDatabase db = new ProductDatabase();
+        ProductDatabase productdb_connect = new ProductDatabase();
         private string picpath;
         private Image pic;
         OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
 
         public Save_Product()
         {
+            productdb_connect.product_connString();
             InitializeComponent();
             this.WindowState = FormWindowState.Maximized;
         }
@@ -41,8 +41,8 @@ namespace ACOTIN_POS_APPLICATION
             }
 
             try
-            {
-                LoadAllProducts();
+            { 
+                
             }
             catch
             {
@@ -51,18 +51,21 @@ namespace ACOTIN_POS_APPLICATION
         }
 
         // Load all products to DataGridView
-        private void LoadAllProducts()
-        {
-            try
-            {
-                DataTable dt = db.GetAllProducts();
-                dataGridView1.DataSource = dt;
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error loading products: " + ex.Message);
-            }
-        }
+        //private void LoadAllProducts()
+        //{
+        //    try
+        //    {
+        //        productdb_connect.product_sql = "SELECT * FROM productTbl";
+        //        productdb_connect.product_cmd();
+        //        productdb_connect.product_sqladapterSelect();
+        //        productdb_connect.product_sqldatasetSELECT();
+        //        dataGridView1.DataSource = productdb_connect.product_sql_dataset.Tables[0];
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show("Error loading products: " + ex.Message);
+        //    }
+        //}
 
         private void cleartextboxes()
         {
@@ -120,19 +123,16 @@ namespace ACOTIN_POS_APPLICATION
                     return;
                 }
 
-                db.InsertProduct(
-                    productName: nameTxtbox1.Text,
-                    productId: Barcode_Combobox.Text,
-                    quantity: string.IsNullOrWhiteSpace(quantityTxtbox1.Text) ? 0 : int.Parse(quantityTxtbox1.Text),
-                    price: string.IsNullOrWhiteSpace(priceTxtbox1.Text) ? 0 : decimal.Parse(priceTxtbox1.Text),
-                    unit: unitTxtbox1.Text,
-                    description: descriptionTxtbox1.Text,
-                    productPicPath: picpathTxtbox1.Text,
-                    barcodePicPath: barcodeTxtbox1.Text
-                );
+                productdb_connect.product_sql = "INSERT INTO productTbl (product_name, productid, quantity, price, unit, description, product_pic_path, barcode_pic_path) " +
+                                                 "VALUES ('" + nameTxtbox1.Text + "', '" + Barcode_Combobox.Text + "', " +
+                                                 (string.IsNullOrWhiteSpace(quantityTxtbox1.Text) ? "0" : quantityTxtbox1.Text) + ", " +
+                                                 (string.IsNullOrWhiteSpace(priceTxtbox1.Text) ? "0" : priceTxtbox1.Text) + ", '" +
+                                                 unitTxtbox1.Text + "', '" + descriptionTxtbox1.Text + "', '" +
+                                                 picpathTxtbox1.Text + "', '" + barcodeTxtbox1.Text + "')";
+                productdb_connect.product_cmd();
+                productdb_connect.product_sqladapterInsert();
 
-                MessageBox.Show("Product saved successfully!");
-                LoadAllProducts();
+                MessageBox.Show("Product saved successfully!"); 
                 cleartextboxes();
             }
             catch (Exception ex)
@@ -152,18 +152,21 @@ namespace ACOTIN_POS_APPLICATION
                     return;
                 }
 
-                DataTable dt = db.GetProductByBarcode(Barcode_Combobox  .Text);
+                productdb_connect.product_sql = "SELECT * FROM productTbl WHERE productid = '" + Barcode_Combobox.Text + "'";
+                productdb_connect.product_cmd();
+                productdb_connect.product_sqladapterSelect();
+                productdb_connect.product_sqldatasetSELECT();
 
-                if (dt.Rows.Count > 0)
+                if (productdb_connect.product_sql_dataset.Tables[0].Rows.Count > 0)
                 {
                     // Fill textboxes with product info
-                    nameTxtbox1.Text = dt.Rows[0]["product_name"].ToString();
-                    quantityTxtbox1.Text = dt.Rows[0]["quantity"].ToString();
-                    priceTxtbox1.Text = dt.Rows[0]["price"].ToString();
-                    unitTxtbox1.Text = dt.Rows[0]["unit"].ToString();
-                    descriptionTxtbox1.Text = dt.Rows[0]["description"].ToString();
-                    picpathTxtbox1.Text = dt.Rows[0]["product_pic_path"].ToString();
-                    barcodeTxtbox1.Text = dt.Rows[0]["barcode_pic_path"].ToString();
+                    nameTxtbox1.Text = productdb_connect.product_sql_dataset.Tables[0].Rows[0]["product_name"].ToString();
+                    quantityTxtbox1.Text = productdb_connect.product_sql_dataset.Tables[0].Rows[0]["quantity"].ToString();
+                    priceTxtbox1.Text = productdb_connect.product_sql_dataset.Tables[0].Rows[0]["price"].ToString();
+                    unitTxtbox1.Text = productdb_connect.product_sql_dataset.Tables[0].Rows[0]["unit"].ToString();
+                    descriptionTxtbox1.Text = productdb_connect.product_sql_dataset.Tables[0].Rows[0]["description"].ToString();
+                    picpathTxtbox1.Text = productdb_connect.product_sql_dataset.Tables[0].Rows[0]["product_pic_path"].ToString();
+                    barcodeTxtbox1.Text = productdb_connect.product_sql_dataset.Tables[0].Rows[0]["barcode_pic_path"].ToString();
 
                     // Load images
                     try
@@ -202,19 +205,18 @@ namespace ACOTIN_POS_APPLICATION
                     return;
                 }
 
-                db.UpdateProduct(
-                    productName: nameTxtbox1.Text,
-                    productId: Barcode_Combobox.Text,
-                    quantity: string.IsNullOrWhiteSpace(quantityTxtbox1.Text) ? 0 : int.Parse(quantityTxtbox1.Text),
-                    price: string.IsNullOrWhiteSpace(priceTxtbox1.Text) ? 0 : decimal.Parse(priceTxtbox1.Text),
-                    unit: unitTxtbox1.Text,
-                    description: descriptionTxtbox1.Text,
-                    productPicPath: picpathTxtbox1.Text,
-                    barcodePicPath: barcodeTxtbox1.Text
-                );
+                productdb_connect.product_sql = "UPDATE productTbl SET product_name = '" + nameTxtbox1.Text + "', " +
+                                                 "quantity = " + (string.IsNullOrWhiteSpace(quantityTxtbox1.Text) ? "0" : quantityTxtbox1.Text) + ", " +
+                                                 "price = " + (string.IsNullOrWhiteSpace(priceTxtbox1.Text) ? "0" : priceTxtbox1.Text) + ", " +
+                                                 "unit = '" + unitTxtbox1.Text + "', " +
+                                                 "description = '" + descriptionTxtbox1.Text + "', " +
+                                                 "product_pic_path = '" + picpathTxtbox1.Text + "', " +
+                                                 "barcode_pic_path = '" + barcodeTxtbox1.Text + "' " +
+                                                 "WHERE productid = '" + Barcode_Combobox.Text + "'";
+                productdb_connect.product_cmd();
+                productdb_connect.product_sqladapterUpdate();
 
-                MessageBox.Show("Product updated successfully!");
-                LoadAllProducts();
+                MessageBox.Show("Product updated successfully!"); 
             }
             catch (Exception ex)
             {
@@ -242,9 +244,11 @@ namespace ACOTIN_POS_APPLICATION
 
                 if (result == DialogResult.Yes)
                 {
-                    db.DeleteProduct(Barcode_Combobox .Text);
-                    MessageBox.Show("Product deleted successfully!");
-                    LoadAllProducts();
+                    productdb_connect.product_sql = "DELETE FROM productTbl WHERE productid = '" + Barcode_Combobox.Text + "'";
+                    productdb_connect.product_cmd();
+                    productdb_connect.product_sqladapterDelete();
+
+                    MessageBox.Show("Product deleted successfully!"); 
                     cleartextboxes();
                 }
             }
@@ -297,26 +301,9 @@ namespace ACOTIN_POS_APPLICATION
 
         }
 
-        private void label2_Click(object sender, EventArgs e)
+        private void barcodeTxtbox1_TextChanged(object sender, EventArgs e)
         {
 
         }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label5_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox5_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-
     }
 }

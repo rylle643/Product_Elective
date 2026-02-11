@@ -1,246 +1,69 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace ACOTIN_POS_APPLICATION
 {
     internal class ProductDatabase
     {
-        private string connectionString = "Data Source=localhost\\SQLEXPRESS;Initial Catalog=Products;Integrated Security=True";
-        private SqlConnection connection;
+        public String product_connectionString = null;
+        public SqlConnection product_sql_connection;
+        public SqlCommand product_sql_command;
+        public DataSet product_sql_dataset;
+        public SqlDataAdapter product_sql_dataadapter;
+        public string product_sql = null;
 
-        // Constructor
-        public ProductDatabase()
+        public void product_connString()
         {
-            connection = new SqlConnection(connectionString);
+            product_sql_connection = new SqlConnection();
+            product_connectionString = "Data Source=192.168.1.9,1433;Initial Catalog=Products;User ID=Rylle_PC;Password=0000;";
+            product_sql_connection = new SqlConnection(product_connectionString);
+            product_sql_connection.ConnectionString = product_connectionString;
+            product_sql_connection.Open();
         }
 
-        // Open connection
-        public void OpenConnection()
+        public void product_cmd()
         {
-            if (connection.State == ConnectionState.Closed)
-            {
-                connection.Open();
-            }
+            product_sql_command = new SqlCommand(product_sql, product_sql_connection);
+            product_sql_command.CommandType = CommandType.Text;
         }
 
-        // Close connection
-        public void CloseConnection()
+        public void product_sqladapterSelect()
         {
-            if (connection.State == ConnectionState.Open)
-            {
-                connection.Close();
-            }
+            product_sql_dataadapter = new SqlDataAdapter();
+            product_sql_dataadapter.SelectCommand = product_sql_command;
+            product_sql_command.ExecuteNonQuery();
         }
 
-        // INSERT - Add new product
-        public void InsertProduct(string productName, string productId, int quantity, decimal price,
-                                  string unit, string description, string productPicPath, string barcodePicPath)
+        public void product_sqladapterInsert()
         {
-            try
-            {
-                OpenConnection();
-                string query = "INSERT INTO productTbl (product_name, productid, quantity, price, unit, description, product_pic_path, barcode_pic_path) " +
-                               "VALUES (@productName, @productId, @quantity, @price, @unit, @description, @productPicPath, @barcodePicPath)";
-
-                SqlCommand cmd = new SqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@productName", productName);
-                cmd.Parameters.AddWithValue("@productId", productId);
-                cmd.Parameters.AddWithValue("@quantity", quantity);
-                cmd.Parameters.AddWithValue("@price", price);
-                cmd.Parameters.AddWithValue("@unit", unit);
-                cmd.Parameters.AddWithValue("@description", description);
-                cmd.Parameters.AddWithValue("@productPicPath", productPicPath);
-                cmd.Parameters.AddWithValue("@barcodePicPath", barcodePicPath);
-
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error inserting product: " + ex.Message);
-            }
-            finally
-            {
-                CloseConnection();
-            }
+            product_sql_dataadapter = new SqlDataAdapter();
+            product_sql_dataadapter.InsertCommand = product_sql_command;
+            product_sql_command.ExecuteNonQuery();
         }
 
-        // UPDATE - Update product
-        public void UpdateProduct(string productName, string productId, int quantity, decimal price,
-                                  string unit, string description, string productPicPath, string barcodePicPath)
+        public void product_sqladapterDelete()
         {
-            try
-            {
-                OpenConnection();
-                string query = "UPDATE productTbl SET product_name = @productName, quantity = @quantity, price = @price, " +
-                               "unit = @unit, description = @description, product_pic_path = @productPicPath, " +
-                               "barcode_pic_path = @barcodePicPath WHERE productid = @productId";
-
-                SqlCommand cmd = new SqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@productName", productName);
-                cmd.Parameters.AddWithValue("@productId", productId);
-                cmd.Parameters.AddWithValue("@quantity", quantity);
-                cmd.Parameters.AddWithValue("@price", price);
-                cmd.Parameters.AddWithValue("@unit", unit);
-                cmd.Parameters.AddWithValue("@description", description);
-                cmd.Parameters.AddWithValue("@productPicPath", productPicPath);
-                cmd.Parameters.AddWithValue("@barcodePicPath", barcodePicPath);
-
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error updating product: " + ex.Message);
-            }
-            finally
-            {
-                CloseConnection();
-            }
+            product_sql_dataadapter = new SqlDataAdapter();
+            product_sql_dataadapter.DeleteCommand = product_sql_command;
+            product_sql_command.ExecuteNonQuery();
         }
 
-        // DELETE - Delete product by barcode
-        public void DeleteProduct(string productId)
+        public void product_sqladapterUpdate()
         {
-            try
-            {
-                OpenConnection();
-                string query = "DELETE FROM productTbl WHERE productid = @productId";
-
-                SqlCommand cmd = new SqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@productId", productId);
-
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error deleting product: " + ex.Message);
-            }
-            finally
-            {
-                CloseConnection();
-            }
+            product_sql_dataadapter = new SqlDataAdapter();
+            product_sql_dataadapter.UpdateCommand = product_sql_command;
+            product_sql_command.ExecuteNonQuery();
         }
 
-        // SELECT - Get all products
-        public DataTable GetAllProducts()
+        public void product_sqldatasetSELECT()
         {
-            DataTable dt = new DataTable();
-            try
-            {
-                OpenConnection();
-                string query = "SELECT * FROM productTbl";
-
-                SqlCommand cmd = new SqlCommand(query, connection);
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                adapter.Fill(dt);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error getting products: " + ex.Message);
-            }
-            finally
-            {
-                CloseConnection();
-            }
-            return dt;
-        }
-
-        // SELECT - Get product by barcode
-        public DataTable GetProductByBarcode(string productId)
-        {
-            DataTable dt = new DataTable();
-            try
-            {
-                OpenConnection();
-                string query = "SELECT * FROM productTbl WHERE productid = @productId";
-
-                SqlCommand cmd = new SqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@productId", productId);
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                adapter.Fill(dt);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error getting product: " + ex.Message);
-            }
-            finally
-            {
-                CloseConnection();
-            }
-            return dt;
-        }
-
-        // SELECT - Search product by name
-        public DataTable SearchProductByName(string productName)
-        {
-            DataTable dt = new DataTable();
-            try
-            {
-                OpenConnection();
-                string query = "SELECT * FROM productTbl WHERE product_name LIKE @productName";
-
-                SqlCommand cmd = new SqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@productName", "%" + productName + "%");
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                adapter.Fill(dt);
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error searching products: " + ex.Message);
-            }
-            finally
-            {
-                CloseConnection();
-            }
-            return dt;
-        }
-
-        // UPDATE - Update only quantity (for inventory management)
-        public void UpdateQuantity(string productId, int newQuantity)
-        {
-            try
-            {
-                OpenConnection();
-                string query = "UPDATE productTbl SET quantity = @quantity WHERE productid = @productId";
-
-                SqlCommand cmd = new SqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@quantity", newQuantity);
-                cmd.Parameters.AddWithValue("@productId", productId);
-
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error updating quantity: " + ex.Message);
-            }
-            finally
-            {
-                CloseConnection();
-            }
-        }
-
-        // UPDATE - Update only price
-        public void UpdatePrice(string productId, decimal newPrice)
-        {
-            try
-            {
-                OpenConnection();
-                string query = "UPDATE productTbl SET price = @price WHERE productid = @productId";
-
-                SqlCommand cmd = new SqlCommand(query, connection);
-                cmd.Parameters.AddWithValue("@price", newPrice);
-                cmd.Parameters.AddWithValue("@productId", productId);
-
-                cmd.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error updating price: " + ex.Message);
-            }
-            finally
-            {
-                CloseConnection();
-            }
+            product_sql_dataset = new DataSet();
+            product_sql_dataadapter.Fill(product_sql_dataset, "productTbl");
         }
     }
 }
