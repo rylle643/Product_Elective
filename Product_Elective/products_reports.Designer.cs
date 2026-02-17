@@ -42,19 +42,19 @@
             // optionCombo
             // 
             this.optionCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.optionCombo.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.optionCombo.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.optionCombo.FormattingEnabled = true;
             this.optionCombo.Location = new System.Drawing.Point(35, 57);
             this.optionCombo.Name = "optionCombo";
-            this.optionCombo.Size = new System.Drawing.Size(646, 28);
+            this.optionCombo.Size = new System.Drawing.Size(646, 38);
             this.optionCombo.TabIndex = 1;
             // 
             // optionInputTxtbox
             // 
-            this.optionInputTxtbox.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.optionInputTxtbox.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.optionInputTxtbox.Location = new System.Drawing.Point(687, 58);
             this.optionInputTxtbox.Name = "optionInputTxtbox";
-            this.optionInputTxtbox.Size = new System.Drawing.Size(646, 27);
+            this.optionInputTxtbox.Size = new System.Drawing.Size(646, 35);
             this.optionInputTxtbox.TabIndex = 2;
             // 
             // Search
@@ -62,7 +62,7 @@
             this.Search.BackColor = System.Drawing.Color.PaleVioletRed;
             this.Search.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.Search.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Search.Location = new System.Drawing.Point(1339, 52);
+            this.Search.Location = new System.Drawing.Point(1339, 57);
             this.Search.Name = "Search";
             this.Search.Size = new System.Drawing.Size(161, 38);
             this.Search.TabIndex = 3;
@@ -107,7 +107,7 @@
             this.button1.BackColor = System.Drawing.Color.PaleVioletRed;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.Location = new System.Drawing.Point(1506, 52);
+            this.button1.Location = new System.Drawing.Point(1506, 57);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(161, 38);
             this.button1.TabIndex = 189;
@@ -120,9 +120,9 @@
             this.button5.BackColor = System.Drawing.Color.Gainsboro;
             this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button5.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button5.Location = new System.Drawing.Point(1673, 52);
+            this.button5.Location = new System.Drawing.Point(1673, 57);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(161, 38);
+            this.button5.Size = new System.Drawing.Size(161, 39);
             this.button5.TabIndex = 199;
             this.button5.Text = "EXIT";
             this.button5.UseVisualStyleBackColor = false;
