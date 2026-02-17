@@ -38,12 +38,12 @@ namespace Product_Elective
             else if (radioButton2.Checked)  // Senior Citizen
             {
                 DiscountType = "Senior Citizen";
-                DiscountRate = 0.20m;
+                DiscountRate = 0.30m;
             }
             else if (radioButton3.Checked)  // PWD
             {
                 DiscountType = "PWD";
-                DiscountRate = 0.20m;
+                DiscountRate = 0.25m;
             }
             else if (radioButton4.Checked)  // Employee
             {
