@@ -17,7 +17,7 @@ namespace Product_Elective
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Save_Product());
+            Application.Run(new products_reports());
             //Application.Run(new BarcodeGenerator());
         }
     }

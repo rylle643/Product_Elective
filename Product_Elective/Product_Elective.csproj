@@ -55,11 +55,11 @@
     <Compile Include="BarcodeGenerator.Designer.cs">
       <DependentUpon>BarcodeGenerator.cs</DependentUpon>
     </Compile>
-    <Compile Include="Form1.cs">
+    <Compile Include="products_reports.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="products_reports.Designer.cs">
+      <DependentUpon>products_reports.cs</DependentUpon>
     </Compile>
     <Compile Include="ProductDatabase.cs" />
     <Compile Include="Program.cs" />
@@ -73,8 +73,11 @@
     <EmbeddedResource Include="BarcodeGenerator.resx">
       <DependentUpon>BarcodeGenerator.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="products_reports.resx">
+      <DependentUpon>products_reports.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -99,6 +102,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\no photo1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\no photo2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
