@@ -1,25 +1,23 @@
-﻿using Product_Elective;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Product_Elective
 {
     public partial class Cashier : Form
     {
+        // ─── DATABASE ─────────────────────────────────────────────────────────────
         ProductDatabase productdb_connect = new ProductDatabase();
         employee_dbconnection empdb_connect = new employee_dbconnection();
+
+        // ─── TRANSACTION INFO ─────────────────────────────────────────────────────
+        private int selectedQuantity = 1;
         private string lastPaymentType = "";
         private decimal lastAmountPaid = 0;
         private decimal lastChange = 0;
-
-        private int selectedQuantity = 1; // default quantity
+        private string lastDiscountType = "";
+        private decimal lastDiscountRate = 0;
 
         public Cashier()
         {
@@ -31,20 +29,13 @@ namespace Product_Elective
         // ─── LOAD ─────────────────────────────────────────────────────────────────
         private void Cashier_Load(object sender, EventArgs e)
         {
-            // Show current date
             time_dateLabel.Text = DateTime.Now.ToString("MMMM dd, yyyy");
-
-            // Setup OrderGridView columns
             SetupOrderGrid();
-
-            // Load employees into combobox
             LoadEmployees();
-
-            // Focus search box on load
             SearchtextBox.Focus();
         }
 
-        // ─── GRIDVIEW SETUP ───────────────────────────────────────────────────────
+        // ─── GRID SETUP ───────────────────────────────────────────────────────────
         private void SetupOrderGrid()
         {
             OrderGridView.Columns.Clear();
@@ -64,14 +55,12 @@ namespace Product_Elective
             OrderGridView.GridColor = Color.FromArgb(244, 210, 224);
             OrderGridView.BorderStyle = BorderStyle.None;
 
-            // Header style — PaleVioletRed
             OrderGridView.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(219, 112, 147);
             OrderGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
             OrderGridView.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
             OrderGridView.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             OrderGridView.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(219, 112, 147);
 
-            // Row style — LavenderBlush
             OrderGridView.DefaultCellStyle.BackColor = Color.FromArgb(255, 240, 245);
             OrderGridView.DefaultCellStyle.ForeColor = Color.FromArgb(100, 40, 70);
             OrderGridView.DefaultCellStyle.Font = new Font("Segoe UI", 9.5F);
@@ -79,35 +68,30 @@ namespace Product_Elective
             OrderGridView.DefaultCellStyle.SelectionForeColor = Color.White;
             OrderGridView.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-            // Alternating rows
             OrderGridView.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(252, 228, 237);
             OrderGridView.AlternatingRowsDefaultCellStyle.ForeColor = Color.FromArgb(100, 40, 70);
             OrderGridView.AlternatingRowsDefaultCellStyle.SelectionBackColor = Color.FromArgb(228, 144, 173);
             OrderGridView.AlternatingRowsDefaultCellStyle.SelectionForeColor = Color.White;
 
-            // Columns
             OrderGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "colBarcode", HeaderText = "Barcode", Width = 110 });
             OrderGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "colName", HeaderText = "Product Name", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
             OrderGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "colPrice", HeaderText = "Price (₱)", Width = 100 });
             OrderGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "colQty", HeaderText = "Qty", Width = 60 });
             OrderGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "colTotal", HeaderText = "Total (₱)", Width = 110 });
 
-            // Right-align price columns
             OrderGridView.Columns["colPrice"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             OrderGridView.Columns["colTotal"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
         }
 
-        // ─── LOAD EMPLOYEES INTO COMBOBOX ─────────────────────────────────────────
+        // ─── LOAD EMPLOYEES ───────────────────────────────────────────────────────
         private void LoadEmployees()
         {
             try
             {
-                // Clear items first
                 cashier_comboBox.Items.Clear();
                 cashier_comboBox.Items.Add("-- Select Cashier --");
 
-                // Query to get all employees
-                empdb_connect.employee_sql = "SELECT emp_id, emp_fname, emp_mname, emp_lname FROM employeeTbl";
+                empdb_connect.employee_sql = "SELECT emp_id FROM employeeTbl";
                 empdb_connect.employee_cmd();
                 empdb_connect.employee_sqladapterSelect();
                 empdb_connect.employee_sqldatasetSELECT();
@@ -120,22 +104,20 @@ namespace Product_Elective
                     return;
                 }
 
-                // Add each employee ID to the ComboBox
                 foreach (DataRow row in dt.Rows)
                 {
                     cashier_comboBox.Items.Add(row["emp_id"].ToString());
                 }
 
-                cashier_comboBox.SelectedIndex = 0; // Show default
+                cashier_comboBox.SelectedIndex = 0;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show("Error loading employees: " + ex.Message);
+                MessageBox.Show("Error occurs in this area. Please contact your administrator for this matter!!!");
             }
         }
 
-
-        // ─── EMPLOYEE COMBOBOX — show fname and surname labels ────────────────────
+        // ─── CASHIER COMBOBOX ─────────────────────────────────────────────────────
         private void cashier_comboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -158,32 +140,17 @@ namespace Product_Elective
 
                 if (dt.Rows.Count > 0)
                 {
-                    DataRow emp = dt.Rows[0];
-                    emp_fnameLabel.Text = emp["emp_fname"].ToString();
-                    emp_surnameLabel.Text = emp["emp_mname"].ToString() + " " + emp["emp_lname"].ToString();
-                }
-                else
-                {
-                    emp_fnameLabel.Text = "";
-                    emp_surnameLabel.Text = "";
+                    emp_fnameLabel.Text = dt.Rows[0]["emp_fname"].ToString();
+                    emp_surnameLabel.Text = dt.Rows[0]["emp_mname"].ToString() + " " + dt.Rows[0]["emp_lname"].ToString();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show("Error loading cashier info: " + ex.Message);
+                MessageBox.Show("Error occurs in this area. Please contact your administrator for this matter!!!");
             }
         }
 
-
-
-        // ─── SEARCH BY BARCODE ────────────────────────────────────────────────────
-        private void product_select()
-        {
-            productdb_connect.product_cmd();
-            productdb_connect.product_sqladapterSelect();
-            productdb_connect.product_sqldatasetSELECT();
-        }
-
+        // ─── SEARCH PRODUCT ───────────────────────────────────────────────────────
         private void button14_Click(object sender, EventArgs e)
         {
             try
@@ -196,17 +163,18 @@ namespace Product_Elective
                 }
 
                 productdb_connect.product_sql = "SELECT * FROM productTbl WHERE productid = '" + SearchtextBox.Text.Trim() + "'";
-                product_select();
+                productdb_connect.product_cmd();
+                productdb_connect.product_sqladapterSelect();
+                productdb_connect.product_sqldatasetSELECT();
 
-                if (productdb_connect.product_sql_dataset.Tables[0].Rows.Count > 0)
+                if (productdb_connect.product_sql_dataset.Tables["productTbl"].Rows.Count > 0)
                 {
-                    DataRow product = productdb_connect.product_sql_dataset.Tables[0].Rows[0];
+                    DataRow product = productdb_connect.product_sql_dataset.Tables["productTbl"].Rows[0];
                     string barcode = product["productid"].ToString();
                     string name = product["product_name"].ToString();
                     decimal price = Convert.ToDecimal(product["price"]);
                     int stockQty = Convert.ToInt32(product["quantity"]);
 
-                    // Check if enough stock
                     if (stockQty < selectedQuantity)
                     {
                         MessageBox.Show("Not enough stock! Available: " + stockQty);
@@ -215,7 +183,6 @@ namespace Product_Elective
                         return;
                     }
 
-                    // Check if product already in grid — update quantity instead of adding duplicate
                     bool found = false;
                     foreach (DataGridViewRow row in OrderGridView.Rows)
                     {
@@ -237,7 +204,6 @@ namespace Product_Elective
                         }
                     }
 
-                    // Add new row if not already in grid
                     if (!found)
                     {
                         OrderGridView.Rows.Add(
@@ -250,7 +216,7 @@ namespace Product_Elective
                     }
 
                     UpdateTotalPrice();
-                    selectedQuantity = 1;       // reset after each scan
+                    selectedQuantity = 1;
                     SearchtextBox.Clear();
                     SearchtextBox.Focus();
                 }
@@ -261,9 +227,113 @@ namespace Product_Elective
                     SearchtextBox.Focus();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show("Error searching product: " + ex.Message);
+                MessageBox.Show("Error occurs in this area. Please contact your administrator for this matter!!!");
+            }
+        }
+
+        // ─── UPDATE GRAND TOTAL ───────────────────────────────────────────────────
+        private void UpdateTotalPrice()
+        {
+            decimal grandTotal = 0;
+
+            foreach (DataGridViewRow row in OrderGridView.Rows)
+            {
+                if (row.Cells["colTotal"].Value != null)
+                {
+                    string totalStr = row.Cells["colTotal"].Value.ToString().Replace("₱", "").Replace(",", "").Trim();
+                    if (decimal.TryParse(totalStr, out decimal rowTotal))
+                        grandTotal += rowTotal;
+                }
+            }
+
+            priceTxtbox1.Text = "₱" + grandTotal.ToString("#,##0.00");
+        }
+
+        // ─── CLEAR ALL ────────────────────────────────────────────────────────────
+        private void ClearAll()
+        {
+            OrderGridView.Rows.Clear();
+            priceTxtbox1.Text = "₱0.00";
+            textBox1.Text = "₱0.00";
+            selectedQuantity = 1;
+            lastPaymentType = "";
+            lastAmountPaid = 0;
+            lastChange = 0;
+            lastDiscountType = "";
+            lastDiscountRate = 0;
+            cashier_comboBox.SelectedIndex = 0;
+            emp_fnameLabel.Text = "";
+            emp_surnameLabel.Text = "";
+            SearchtextBox.Focus();
+        }
+
+        // ─── DEDUCT STOCK ─────────────────────────────────────────────────────────
+        private void DeductStockFromDatabase()
+        {
+            try
+            {
+                foreach (DataGridViewRow row in OrderGridView.Rows)
+                {
+                    string barcode = row.Cells["colBarcode"].Value?.ToString();
+                    int qty = Convert.ToInt32(row.Cells["colQty"].Value);
+
+                    if (!string.IsNullOrEmpty(barcode))
+                    {
+                        productdb_connect.product_sql = "UPDATE productTbl SET quantity = quantity - " + qty + " WHERE productid = '" + barcode + "'";
+                        productdb_connect.product_cmd();
+                        productdb_connect.product_sqladapterUpdate();
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Error occurs in this area. Please contact your administrator for this matter!!!");
+            }
+        }
+
+        // ─── OPEN RECEIPT ─────────────────────────────────────────────────────────
+        private void OpenReceipt(string paymentType, decimal amountPaid, decimal change)
+        {
+            try
+            {
+                Product_Elective.Receipt print = new Product_Elective.Receipt();
+
+                print.printDisplayListbox.Items.Clear();
+                print.printDisplayListbox.Items.Add("-----------------------------------------------------");
+                print.printDisplayListbox.Items.Add("                  SALES RECEIPT                     ");
+                print.printDisplayListbox.Items.Add("-----------------------------------------------------");
+                print.printDisplayListbox.Items.Add("Date:       " + DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
+                print.printDisplayListbox.Items.Add("Cashier ID: " + cashier_comboBox.SelectedItem.ToString());
+                print.printDisplayListbox.Items.Add("Cashier:    " + emp_fnameLabel.Text + " " + emp_surnameLabel.Text);
+                print.printDisplayListbox.Items.Add("Discount:   " + lastDiscountType + (lastDiscountRate > 0 ? " (" + (lastDiscountRate * 100) + "%)" : ""));
+                print.printDisplayListbox.Items.Add("-----------------------------------------------------");
+                print.printDisplayListbox.Items.Add(string.Format("{0,-24} {1,5} {2,12}", "Item", "Qty", "Total"));
+                print.printDisplayListbox.Items.Add("-----------------------------------------------------");
+
+                foreach (DataGridViewRow row in OrderGridView.Rows)
+                {
+                    string itemName = row.Cells["colName"].Value?.ToString();
+                    string qty = row.Cells["colQty"].Value?.ToString();
+                    string total = row.Cells["colTotal"].Value?.ToString();
+                    print.printDisplayListbox.Items.Add(string.Format("{0,-24} {1,5} {2,12}", itemName, qty, total));
+                }
+
+                print.printDisplayListbox.Items.Add("-----------------------------------------------------");
+                print.printDisplayListbox.Items.Add(string.Format("{0,-30} {1,12}", "Total:", priceTxtbox1.Text));
+                print.printDisplayListbox.Items.Add(string.Format("{0,-30} {1,12}", "Payment Type:", paymentType));
+                print.printDisplayListbox.Items.Add(string.Format("{0,-30} {1,12}", "Amount Paid:", "₱" + amountPaid.ToString("#,##0.00")));
+                print.printDisplayListbox.Items.Add(string.Format("{0,-30} {1,12}", "Change:", "₱" + change.ToString("#,##0.00")));
+                print.printDisplayListbox.Items.Add("-----------------------------------------------------");
+                print.printDisplayListbox.Items.Add("           Thank you! Come again!                   ");
+                print.printDisplayListbox.Items.Add("-----------------------------------------------------");
+
+                print.ShowDialog();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Error occurs in this area. Please contact your administrator for this matter!!!");
             }
         }
 
@@ -276,165 +346,61 @@ namespace Product_Elective
                 selectedQuantity = quantityForm.QuantityValue;
                 MessageBox.Show("Quantity set to: " + selectedQuantity + "\nNow scan the product.");
                 SearchtextBox.Focus();
+                SearchtextBox.SelectAll();
             }
         }
 
-        // ─── UPDATE TOTAL PRICE TEXTBOX ───────────────────────────────────────────
-        private void UpdateTotalPrice()
-        {
-            decimal grandTotal = 0;
-
-            foreach (DataGridViewRow row in OrderGridView.Rows)
-            {
-                if (row.Cells["colTotal"].Value != null)
-                {
-                    string totalStr = row.Cells["colTotal"].Value.ToString()
-                                         .Replace("₱", "").Replace(",", "").Trim();
-                    if (decimal.TryParse(totalStr, out decimal rowTotal))
-                        grandTotal += rowTotal;
-                }
-            }
-
-            priceTxtbox1.Text = "₱" + grandTotal.ToString("#,##0.00");
-        }
-
-        // ─── CLEAR ALL ────────────────────────────────────────────────────────────
-        private void button5_Click(object sender, EventArgs e)
-        {
-            OrderGridView.Rows.Clear();
-            priceTxtbox1.Text = "₱0.00";
-            selectedQuantity = 1;
-            SearchtextBox.Focus();
-        }
-
-        // ─── DELETE SELECTED ROW ──────────────────────────────────────────────────
-        private void button6_Click(object sender, EventArgs e)
-        {
-            if (OrderGridView.SelectedRows.Count > 0)
-            {
-                OrderGridView.Rows.RemoveAt(OrderGridView.SelectedRows[0].Index);
-                UpdateTotalPrice();
-            }
-            else
-            {
-                MessageBox.Show("Please select a row to remove.");
-            }
-        }
-
-
-
-        // ─── DEDUCT STOCK FROM DATABASE ───────────────────────────────────────────
-        private void DeductStockFromDatabase()
-        {
-            try
-            {
-                foreach (DataGridViewRow row in OrderGridView.Rows)
-                {
-                    string barcode = row.Cells["colBarcode"].Value?.ToString();
-                    int qty = Convert.ToInt32(row.Cells["colQty"].Value);
-
-                    if (!string.IsNullOrEmpty(barcode))
-                    {
-                        productdb_connect.product_sql = "UPDATE productTbl SET quantity = quantity - " + qty +
-                                                        " WHERE productid = '" + barcode + "'";
-                        productdb_connect.product_cmd();
-                        productdb_connect.product_sqladapterUpdate();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error updating stock: " + ex.Message);
-            }
-        }
-
-        // ─── OPEN RECEIPT ─────────────────────────────────────────────────────────
-        private void OpenReceipt(string paymentType, decimal amountPaid, decimal change)
-        {
-            try
-            {
-                Product_Elective.Receipt print = new Product_Elective.Receipt();
-
-                print.printDisplayListbox.Items.Clear();
-                print.printDisplayListbox.Items.Add("Date: " + DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
-                print.printDisplayListbox.Items.Add("Cashier ID: " + cashier_comboBox.SelectedItem.ToString());
-                print.printDisplayListbox.Items.Add("Cashier: " + emp_fnameLabel.Text + " " + emp_surnameLabel.Text);
-                print.printDisplayListbox.Items.Add("---------------------------");
-                print.printDisplayListbox.Items.Add(string.Format("{0,-18} {1,5} {2,8}", "Item", "Qty", "Total"));
-                print.printDisplayListbox.Items.Add("---------------------------");
-
-                foreach (DataGridViewRow row in OrderGridView.Rows)
-                {
-                    string itemName = row.Cells["colName"].Value?.ToString();
-                    string qty = row.Cells["colQty"].Value?.ToString();
-                    string total = row.Cells["colTotal"].Value?.ToString();
-                    print.printDisplayListbox.Items.Add(
-                        string.Format("{0,-18} {1,5} {2,8}", itemName, qty, total)
-                    );
-                }
-
-                print.printDisplayListbox.Items.Add("---------------------------");
-                print.printDisplayListbox.Items.Add("Total:       " + priceTxtbox1.Text);
-                print.printDisplayListbox.Items.Add("Payment:     " + paymentType);
-                print.printDisplayListbox.Items.Add("Amount Paid: ₱" + amountPaid.ToString("#,##0.00"));
-                print.printDisplayListbox.Items.Add("Change:      ₱" + change.ToString("#,##0.00"));
-                print.printDisplayListbox.Items.Add("===========================");
-                print.printDisplayListbox.Items.Add("   Thank you! Come again!  ");
-                print.printDisplayListbox.Items.Add("===========================");
-
-                print.Show();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error opening receipt: " + ex.Message);
-            }
-        }
-
-        // ─── PRINT BUTTON ─────────────────────────────────────────────────────────
-        private void Printbutton_Click(object sender, EventArgs e)
+        // ─── DISCOUNT BUTTON ──────────────────────────────────────────────────────
+        private void button9_Click(object sender, EventArgs e)
         {
             try
             {
                 if (OrderGridView.Rows.Count == 0)
                 {
-                    MessageBox.Show("No items to print!");
+                    MessageBox.Show("No items in the order!");
                     return;
                 }
 
-                OpenReceipt(lastPaymentType, lastAmountPaid, lastChange);
+                Discount discountForm = new Discount();
+                if (discountForm.ShowDialog() != DialogResult.OK)
+                    return;
 
-                // Clear after printing
-                OrderGridView.Rows.Clear();
-                priceTxtbox1.Text = "₱0.00";
-                selectedQuantity = 1;
-                lastPaymentType = "";
-                lastAmountPaid = 0;
-                lastChange = 0;
-                SearchtextBox.Focus();
+                lastDiscountType = discountForm.DiscountType;
+                lastDiscountRate = discountForm.DiscountRate;
+
+                // ✅ Debug — remove this after confirming it works
+                MessageBox.Show("Type: " + lastDiscountType + " | Rate: " + lastDiscountRate);
+
+                foreach (DataGridViewRow row in OrderGridView.Rows)
+                {
+                    string priceStr = row.Cells["colPrice"].Value?.ToString().Replace("₱", "").Replace(",", "").Trim();
+                    string qtyStr = row.Cells["colQty"].Value?.ToString();
+
+                    if (decimal.TryParse(priceStr, out decimal price) && int.TryParse(qtyStr, out int qty))
+                    {
+                        decimal original = price * qty;
+                        decimal discounted = original - (original * lastDiscountRate);
+                        row.Cells["colTotal"].Value = "₱" + discounted.ToString("#,##0.00");
+                    }
+                }
+
+                UpdateTotalPrice();
+
+                if (lastAmountPaid > 0)
+                {
+                    string totalStr = priceTxtbox1.Text.Replace("₱", "").Replace(",", "").Trim();
+                    decimal newTotal = Convert.ToDecimal(totalStr);
+                    lastChange = lastAmountPaid - newTotal;
+                    textBox1.Text = "₱" + lastChange.ToString("#,##0.00");
+                }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                MessageBox.Show("Error opening print form: " + ex.Message);
+                MessageBox.Show("Error occurs in this area. Please contact your administrator for this matter!!!");
             }
         }
 
-        // ─── GRIDVIEW CLICK (required by Designer) ────────────────────────────────
-        private void OrderGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        // ─── EMPTY HANDLERS ───────────────────────────────────────────────────────
-        private void panel1_Paint(object sender, PaintEventArgs e) { }
-        private void textBox1_TextChanged(object sender, EventArgs e) { }
-        private void priceTxtbox1_TextChanged(object sender, EventArgs e) { }
-        private void button2_Click(object sender, EventArgs e) { }
-
-        private void button13_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        // ─── PAYMENT BUTTON ───────────────────────────────────────────────────────
         private void Paymentbutton_Click_1(object sender, EventArgs e)
         {
             try
@@ -451,28 +417,165 @@ namespace Product_Elective
                     return;
                 }
 
+                if (string.IsNullOrEmpty(lastDiscountType))
+                {
+                    MessageBox.Show("Please select a discount type first!");
+                    return;
+                }
+
                 string totalStr = priceTxtbox1.Text.Replace("₱", "").Replace(",", "").Trim();
                 decimal grandTotal = Convert.ToDecimal(totalStr);
 
                 Payment paymentForm = new Payment(grandTotal);
                 if (paymentForm.ShowDialog() == DialogResult.OK)
                 {
-                    // Save payment info for receipt
                     lastPaymentType = paymentForm.PaymentType;
                     lastAmountPaid = paymentForm.AmountPaid;
                     lastChange = paymentForm.Change;
 
-                    // Deduct stock only
                     DeductStockFromDatabase();
 
-                    MessageBox.Show("Payment confirmed! Click Print to print the receipt.",
-                        "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    textBox1.Text = "₱" + lastChange.ToString("#,##0.00");
+
+                    MessageBox.Show("Payment confirmed! Click Print to print the receipt.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Error occurs in this area. Please contact your administrator for this matter!!!");
+            }
+        }
+
+        // ─── PRINT BUTTON ─────────────────────────────────────────────────────────
+        private void Printbutton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (OrderGridView.Rows.Count == 0)
+                {
+                    MessageBox.Show("No items to print!");
+                    return;
+                }
+
+                OpenReceipt(lastPaymentType, lastAmountPaid, lastChange);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Error occurs in this area. Please contact your administrator for this matter!!!");
+            }
+        }
+
+        // ─── SAVE SALE BUTTON ─────────────────────────────────────────────────────
+        private void button13_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (OrderGridView.Rows.Count == 0)
+                {
+                    MessageBox.Show("No items to save!");
+                    return;
+                }
+
+                if (string.IsNullOrEmpty(lastPaymentType))
+                {
+                    MessageBox.Show("Please process payment first!");
+                    return;
+                }
+
+                string dateToSave = DateTime.Now.ToString("M/d/yyyy");
+                string timeToSave = DateTime.Now.ToString("hh:mm tt");
+
+                foreach (DataGridViewRow row in OrderGridView.Rows)
+                {
+                    string productId = row.Cells["colBarcode"].Value?.ToString();
+                    string productName = row.Cells["colName"].Value?.ToString();
+                    string total = row.Cells["colTotal"].Value?.ToString().Replace("₱", "").Replace(",", "").Trim();
+
+                    productdb_connect.product_sql = "INSERT INTO salesTbl (product_id, product_name, total, discount_type, payment_type, amount_paid, change_amount, cashier_id, time_date) VALUES ('" + productId + "', '" + productName + "', '" + total + "', '" + lastDiscountType + "', '" + lastPaymentType + "', '" + lastAmountPaid + "', '" + lastChange + "', '" + cashier_comboBox.SelectedItem.ToString() + "', '" + dateToSave + " " + timeToSave + "')";
+                    productdb_connect.product_cmd();
+                    productdb_connect.product_sqladapterInsert();
+                }
+
+                MessageBox.Show("Sale saved successfully!");
+                ClearAll();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Payment error: " + ex.Message);
+                MessageBox.Show("Actual error: " + ex.Message);
             }
         }
+
+        // ─── LOYALTY BUTTON ───────────────────────────────────────────────────────
+        private void button7_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (OrderGridView.Rows.Count == 0)
+                {
+                    MessageBox.Show("No items in the order!");
+                    return;
+                }
+
+                if (cashier_comboBox.SelectedIndex <= 0)
+                {
+                    MessageBox.Show("Please select a cashier first!");
+                    return;
+                }
+
+                LoyaltyForm loyaltyForm = new LoyaltyForm();
+                if (loyaltyForm.ShowDialog() != DialogResult.OK)
+                    return;
+
+                string customerName = loyaltyForm.CustomerName;
+                int points = OrderGridView.Rows.Count;
+                string dateToSave = DateTime.Now.ToString("M/d/yyyy");
+                string timeToSave = DateTime.Now.ToString("hh:mm tt");
+
+                productdb_connect.product_sql = "INSERT INTO loyaltyTbl (customer_name, points, cashier_id, time_date) VALUES ('" + customerName + "', '" + points + "', '" + cashier_comboBox.SelectedItem.ToString() + "', '" + dateToSave + " " + timeToSave + "')";
+                productdb_connect.product_cmd();
+                productdb_connect.product_sqladapterInsert();
+
+                MessageBox.Show("Added " + points + " point(s) for " + customerName + "!");
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Error occurs in this area. Please contact your administrator for this matter!!!");
+            }
+        }
+
+        // ─── OTHER BUTTONS ────────────────────────────────────────────────────────
+        private void button5_Click(object sender, EventArgs e) { ClearAll(); }
+        private void button3_Click(object sender, EventArgs e) { ClearAll(); }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            if (OrderGridView.SelectedRows.Count > 0)
+            {
+                OrderGridView.Rows.RemoveAt(OrderGridView.SelectedRows[0].Index);
+                UpdateTotalPrice();
+            }
+            else
+            {
+                MessageBox.Show("Please select a row to remove.");
+            }
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Cash drawer is now open!", "Drawer Open", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (OrderGridView.Rows.Count == 0)
+            {
+                MessageBox.Show("No active order to hold.", "Hold Transaction", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            MessageBox.Show("Transaction has been put on hold.", "Transaction Held", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void button10_Click(object sender, EventArgs e) { this.Close(); }
+        private void OrderGridView_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
     }
 }

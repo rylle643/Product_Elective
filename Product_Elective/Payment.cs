@@ -86,6 +86,8 @@ namespace Product_Elective
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information
                 );
+
+                label7.Text = "₱" + change.ToString("#,##0.00");
             }
             else
             {
@@ -98,6 +100,8 @@ namespace Product_Elective
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information
                 );
+
+                label7.Text = "₱0.00";
             }
         }
 

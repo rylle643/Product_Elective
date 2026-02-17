@@ -41,7 +41,6 @@ namespace Product_Elective
             }
         }
 
-        // ─── SELECT ───────────────────────────────────────────────────────────────
         public void employee_sqladapterSelect()
         {
             try
@@ -67,7 +66,6 @@ namespace Product_Elective
             }
         }
 
-        // ─── INSERT ───────────────────────────────────────────────────────────────
         public void employee_sqladapterInsert()
         {
             try
@@ -82,7 +80,6 @@ namespace Product_Elective
             }
         }
 
-        // ─── UPDATE ───────────────────────────────────────────────────────────────
         public void employee_sqladapterUpdate()
         {
             try
@@ -97,7 +94,6 @@ namespace Product_Elective
             }
         }
 
-        // ─── DELETE ───────────────────────────────────────────────────────────────
         public void employee_sqladapterDelete()
         {
             try

@@ -61,7 +61,19 @@
     <Compile Include="Cashier.Designer.cs">
       <DependentUpon>Cashier.cs</DependentUpon>
     </Compile>
+    <Compile Include="Discount.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Discount.Designer.cs">
+      <DependentUpon>Discount.cs</DependentUpon>
+    </Compile>
     <Compile Include="employee_dbconnection.cs" />
+    <Compile Include="LoyaltyForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LoyaltyForm.Designer.cs">
+      <DependentUpon>LoyaltyForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Payment.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -106,6 +118,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Cashier.resx">
       <DependentUpon>Cashier.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Discount.resx">
+      <DependentUpon>Discount.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LoyaltyForm.resx">
+      <DependentUpon>LoyaltyForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Payment.resx">
       <DependentUpon>Payment.cs</DependentUpon>
