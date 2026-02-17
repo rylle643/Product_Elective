@@ -119,5 +119,10 @@ namespace Product_Elective
                 MessageBox.Show("Barcode saved!");
             }
         }
+
+        private void BarcodeGenerator_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

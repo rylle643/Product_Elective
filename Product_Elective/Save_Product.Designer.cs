@@ -1,4 +1,4 @@
-﻿namespace ACOTIN_POS_APPLICATION
+﻿namespace Product_Elective
 {
     partial class Save_Product
     {

@@ -92,6 +92,7 @@
             this.button13.TabIndex = 241;
             this.button13.Text = "PAYMENT [ENTER]";
             this.button13.UseVisualStyleBackColor = false;
+            this.button13.Click += new System.EventHandler(this.button13_Click);
             // 
             // button10
             // 
@@ -141,8 +142,9 @@
             this.Paymentbutton.Name = "Paymentbutton";
             this.Paymentbutton.Size = new System.Drawing.Size(136, 127);
             this.Paymentbutton.TabIndex = 236;
-            this.Paymentbutton.Text = "PAYMENT";
+            this.Paymentbutton.Text = "PAYMENT TYPE";
             this.Paymentbutton.UseVisualStyleBackColor = true;
+            this.Paymentbutton.Click += new System.EventHandler(this.Paymentbutton_Click_1);
             // 
             // button9
             // 
@@ -337,9 +339,9 @@
             this.panel1.Controls.Add(this.emp_surnameLabel);
             this.panel1.Controls.Add(this.emp_fnameLabel);
             this.panel1.ForeColor = System.Drawing.Color.Transparent;
-            this.panel1.Location = new System.Drawing.Point(-1, -1);
+            this.panel1.Location = new System.Drawing.Point(-15, -1);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1906, 38);
+            this.panel1.Size = new System.Drawing.Size(1950, 38);
             this.panel1.TabIndex = 0;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 

@@ -56,7 +56,6 @@
             this.label2.Size = new System.Drawing.Size(108, 25);
             this.label2.TabIndex = 17;
             this.label2.Text = "QUANTITY";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // QuantitytextBox
             // 

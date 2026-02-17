@@ -6,7 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ACOTIN_POS_APPLICATION
+namespace Product_Elective
+
 {
     internal class ProductDatabase
     {

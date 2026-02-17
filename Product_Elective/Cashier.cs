@@ -1,4 +1,4 @@
-﻿using ACOTIN_POS_APPLICATION;
+﻿using Product_Elective;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,6 +15,9 @@ namespace Product_Elective
     {
         ProductDatabase productdb_connect = new ProductDatabase();
         employee_dbconnection empdb_connect = new employee_dbconnection();
+        private string lastPaymentType = "";
+        private decimal lastAmountPaid = 0;
+        private decimal lastChange = 0;
 
         private int selectedQuantity = 1; // default quantity
 
@@ -99,27 +102,38 @@ namespace Product_Elective
         {
             try
             {
+                // Clear items first
+                cashier_comboBox.Items.Clear();
+                cashier_comboBox.Items.Add("-- Select Cashier --");
+
+                // Query to get all employees
                 empdb_connect.employee_sql = "SELECT emp_id, emp_fname, emp_mname, emp_lname FROM employeeTbl";
                 empdb_connect.employee_cmd();
                 empdb_connect.employee_sqladapterSelect();
                 empdb_connect.employee_sqldatasetSELECT();
 
-                cashier_comboBox.Items.Clear();
-                cashier_comboBox.Items.Add("-- Select Cashier --");
+                DataTable dt = empdb_connect.employee_sql_dataset.Tables[0];
 
-                foreach (DataRow row in empdb_connect.employee_sql_dataset.Tables[0].Rows)
+                if (dt.Rows.Count == 0)
                 {
-                    // Show only emp_id in combobox — name shown in labels after selection
+                    MessageBox.Show("No employees found in the database!");
+                    return;
+                }
+
+                // Add each employee ID to the ComboBox
+                foreach (DataRow row in dt.Rows)
+                {
                     cashier_comboBox.Items.Add(row["emp_id"].ToString());
                 }
 
-                cashier_comboBox.SelectedIndex = 0;
+                cashier_comboBox.SelectedIndex = 0; // Show default
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error loading employees. Please contact your administrator!");
+                MessageBox.Show("Error loading employees: " + ex.Message);
             }
         }
+
 
         // ─── EMPLOYEE COMBOBOX — show fname and surname labels ────────────────────
         private void cashier_comboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -140,18 +154,27 @@ namespace Product_Elective
                 empdb_connect.employee_sqladapterSelect();
                 empdb_connect.employee_sqldatasetSELECT();
 
-                if (empdb_connect.employee_sql_dataset.Tables[0].Rows.Count > 0)
+                DataTable dt = empdb_connect.employee_sql_dataset.Tables[0];
+
+                if (dt.Rows.Count > 0)
                 {
-                    DataRow emp = empdb_connect.employee_sql_dataset.Tables[0].Rows[0];
+                    DataRow emp = dt.Rows[0];
                     emp_fnameLabel.Text = emp["emp_fname"].ToString();
                     emp_surnameLabel.Text = emp["emp_mname"].ToString() + " " + emp["emp_lname"].ToString();
                 }
+                else
+                {
+                    emp_fnameLabel.Text = "";
+                    emp_surnameLabel.Text = "";
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error loading cashier info!");
+                MessageBox.Show("Error loading cashier info: " + ex.Message);
             }
         }
+
+
 
         // ─── SEARCH BY BARCODE ────────────────────────────────────────────────────
         private void product_select()
@@ -298,44 +321,7 @@ namespace Product_Elective
             }
         }
 
-        // ─── PAYMENT BUTTON ───────────────────────────────────────────────────────
-        private void Paymentbutton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (OrderGridView.Rows.Count == 0)
-                {
-                    MessageBox.Show("No items in the order!");
-                    return;
-                }
 
-                if (cashier_comboBox.SelectedIndex <= 0)
-                {
-                    MessageBox.Show("Please select a cashier first!");
-                    return;
-                }
-
-                string totalStr = priceTxtbox1.Text.Replace("₱", "").Replace(",", "").Trim();
-                decimal grandTotal = Convert.ToDecimal(totalStr);
-
-                Payment paymentForm = new Payment(grandTotal);
-                if (paymentForm.ShowDialog() == DialogResult.OK)
-                {
-                    DeductStockFromDatabase();
-                    OpenReceipt(paymentForm.PaymentType, paymentForm.AmountPaid, paymentForm.Change);
-
-                    // Clear after sale
-                    OrderGridView.Rows.Clear();
-                    priceTxtbox1.Text = "₱0.00";
-                    selectedQuantity = 1;
-                    SearchtextBox.Focus();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Payment error: " + ex.Message);
-            }
-        }
 
         // ─── DEDUCT STOCK FROM DATABASE ───────────────────────────────────────────
         private void DeductStockFromDatabase()
@@ -370,9 +356,6 @@ namespace Product_Elective
                 Product_Elective.Receipt print = new Product_Elective.Receipt();
 
                 print.printDisplayListbox.Items.Clear();
-                print.printDisplayListbox.Items.Add("===========================");
-                print.printDisplayListbox.Items.Add("        ACOTIN POS         ");
-                print.printDisplayListbox.Items.Add("===========================");
                 print.printDisplayListbox.Items.Add("Date: " + DateTime.Now.ToString("MM/dd/yyyy hh:mm tt"));
                 print.printDisplayListbox.Items.Add("Cashier ID: " + cashier_comboBox.SelectedItem.ToString());
                 print.printDisplayListbox.Items.Add("Cashier: " + emp_fnameLabel.Text + " " + emp_surnameLabel.Text);
@@ -412,11 +395,26 @@ namespace Product_Elective
         {
             try
             {
-                OpenReceipt("Reprint", 0, 0);
+                if (OrderGridView.Rows.Count == 0)
+                {
+                    MessageBox.Show("No items to print!");
+                    return;
+                }
+
+                OpenReceipt(lastPaymentType, lastAmountPaid, lastChange);
+
+                // Clear after printing
+                OrderGridView.Rows.Clear();
+                priceTxtbox1.Text = "₱0.00";
+                selectedQuantity = 1;
+                lastPaymentType = "";
+                lastAmountPaid = 0;
+                lastChange = 0;
+                SearchtextBox.Focus();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error opening print form.");
+                MessageBox.Show("Error opening print form: " + ex.Message);
             }
         }
 
@@ -431,5 +429,50 @@ namespace Product_Elective
         private void textBox1_TextChanged(object sender, EventArgs e) { }
         private void priceTxtbox1_TextChanged(object sender, EventArgs e) { }
         private void button2_Click(object sender, EventArgs e) { }
+
+        private void button13_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Paymentbutton_Click_1(object sender, EventArgs e)
+        {
+            try
+            {
+                if (OrderGridView.Rows.Count == 0)
+                {
+                    MessageBox.Show("No items in the order!");
+                    return;
+                }
+
+                if (cashier_comboBox.SelectedIndex <= 0)
+                {
+                    MessageBox.Show("Please select a cashier first!");
+                    return;
+                }
+
+                string totalStr = priceTxtbox1.Text.Replace("₱", "").Replace(",", "").Trim();
+                decimal grandTotal = Convert.ToDecimal(totalStr);
+
+                Payment paymentForm = new Payment(grandTotal);
+                if (paymentForm.ShowDialog() == DialogResult.OK)
+                {
+                    // Save payment info for receipt
+                    lastPaymentType = paymentForm.PaymentType;
+                    lastAmountPaid = paymentForm.AmountPaid;
+                    lastChange = paymentForm.Change;
+
+                    // Deduct stock only
+                    DeductStockFromDatabase();
+
+                    MessageBox.Show("Payment confirmed! Click Print to print the receipt.",
+                        "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Payment error: " + ex.Message);
+            }
+        }
     }
 }

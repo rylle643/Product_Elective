@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Drawing;
 using System.Windows.Forms;
 
 namespace Product_Elective
 {
     public partial class Payment : Form
     {
-        // ─── PUBLIC RESULTS (read by Cashier after OK) ────────────────────────────
         public string PaymentType { get; private set; }
         public decimal AmountPaid { get; private set; }
         public decimal Change { get; private set; }
 
-        private decimal grandTotal;
+        private readonly decimal grandTotal;
 
         public Payment(decimal total)
         {
@@ -19,39 +17,25 @@ namespace Product_Elective
             InitializeComponent();
         }
 
-        // ─── LOAD — set total label and populate combobox ─────────────────────────
+        // ─── LOAD ─────────────────────────────────────────────────────────────────
         private void Payment_Load(object sender, EventArgs e)
         {
-            // Show the grand total in label3
             label3.Text = "₱" + grandTotal.ToString("#,##0.00");
-            label3.ForeColor = Color.FromArgb(219, 112, 147);
 
-            // Populate payment types
             comboBox1.Items.Clear();
             comboBox1.Items.AddRange(new string[] { "Cash", "GCash", "Card", "Others" });
             comboBox1.SelectedIndex = 0;
 
-            // Set change label default
             label7.Text = "₱0.00";
-            label7.ForeColor = Color.FromArgb(219, 112, 147);
 
-            // Hide amount given + change — only show for Cash
-            label5.Visible = true;
-            textBox1.Visible = true;
-            label6.Visible = true;
-            label7.Visible = true;
+            ToggleCashFields(true);
         }
 
         // ─── PAYMENT TYPE CHANGED ─────────────────────────────────────────────────
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             bool isCash = comboBox1.Text == "Cash";
-
-            // Show amount given + change only for Cash
-            label5.Visible = isCash;
-            textBox1.Visible = isCash;
-            label6.Visible = isCash;
-            label7.Visible = isCash;
+            ToggleCashFields(isCash);
 
             if (!isCash)
             {
@@ -66,26 +50,58 @@ namespace Product_Elective
             if (decimal.TryParse(textBox1.Text, out decimal amount))
             {
                 decimal change = amount - grandTotal;
-
-                if (change >= 0)
-                {
-                    label7.Text = "₱" + change.ToString("#,##0.00");
-                    label7.ForeColor = Color.FromArgb(219, 112, 147);  // enough — rose color
-                }
-                else
-                {
-                    label7.Text = "₱0.00  (Not enough!)";
-                    label7.ForeColor = Color.FromArgb(200, 60, 60);    // red — not enough
-                }
+                label7.Text = change >= 0
+                    ? "₱" + change.ToString("#,##0.00")
+                    : "₱0.00  (Not enough!)";
             }
             else
             {
                 label7.Text = "₱0.00";
-                label7.ForeColor = Color.FromArgb(219, 112, 147);
             }
         }
 
-        // ─── CONFIRM BUTTON (button1) ─────────────────────────────────────────────
+        // ─── CALCULATE BUTTON (button3) ───────────────────────────────────────────
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            string type = comboBox1.Text;
+
+            if (type == "Cash")
+            {
+                if (!decimal.TryParse(textBox1.Text, out decimal amount) || amount < grandTotal)
+                {
+                    MessageBox.Show("Amount given is less than the total!", "Invalid Payment",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    textBox1.Focus();
+                    return;
+                }
+
+                decimal change = amount - grandTotal;
+
+                MessageBox.Show(
+                    "Payment Type:     " + type + "\n" +
+                    "Cash Given:       ₱" + amount.ToString("#,##0.00") + "\n" +
+                    "Total Amount:     ₱" + grandTotal.ToString("#,##0.00") + "\n" +
+                    "Change:           ₱" + change.ToString("#,##0.00"),
+                    "Payment Summary",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+            }
+            else
+            {
+                MessageBox.Show(
+                    "Payment Type:     " + type + "\n" +
+                    "Cash Given:       N/A" + "\n" +
+                    "Total Amount:     ₱" + grandTotal.ToString("#,##0.00") + "\n" +
+                    "Change:           ₱0.00",
+                    "Payment Summary",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+            }
+        }
+
+        // ─── CONFIRM (button1) — no auto print, just validate and close ───────────
         private void button1_Click(object sender, EventArgs e)
         {
             PaymentType = comboBox1.Text;
@@ -94,16 +110,17 @@ namespace Product_Elective
             {
                 if (!decimal.TryParse(textBox1.Text, out decimal amount) || amount < grandTotal)
                 {
-                    MessageBox.Show("Amount given is less than the total!");
+                    MessageBox.Show("Amount given is less than the total!", "Invalid Payment",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     textBox1.Focus();
                     return;
                 }
+
                 AmountPaid = amount;
                 Change = amount - grandTotal;
             }
             else
             {
-                // Non-cash — exact payment assumed
                 AmountPaid = grandTotal;
                 Change = 0;
             }
@@ -112,15 +129,20 @@ namespace Product_Elective
             this.Close();
         }
 
-        // ─── CANCEL BUTTON (button2) ──────────────────────────────────────────────
+        // ─── CANCEL (button2) ─────────────────────────────────────────────────────
         private void button2_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
 
-        // ─── EMPTY HANDLERS (kept so Designer does not break) ────────────────────
-        private void label3_Click(object sender, EventArgs e) { }
-        private void label7_Click(object sender, EventArgs e) { }
+        // ─── HELPER ───────────────────────────────────────────────────────────────
+        private void ToggleCashFields(bool visible)
+        {
+            label5.Visible = visible;
+            textBox1.Visible = visible;
+            label6.Visible = visible;
+            label7.Visible = visible;
+        }
     }
 }

@@ -3,43 +3,41 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 
-namespace ACOTIN_POS_APPLICATION
+namespace Product_Elective
 {
     public class employee_dbconnection
     {
-        // ─── CONNECTION ───────────────────────────────────────────────────────────
         private SqlConnection employee_conn;
         private SqlCommand employee_command;
         private SqlDataAdapter employee_adapter;
         public DataSet employee_sql_dataset;
         public string employee_sql;
 
-        // ─── CONNECTION STRING — same Products database as productTbl ─────────────
         public void employee_connString()
         {
             try
             {
                 employee_conn = new SqlConnection(
-                    "Data Source=.;Initial Catalog=Products;Integrated Security=True;"
+                    "Data Source=192.168.1.9,1433;Initial Catalog=Products;User ID=Rylle_PC;Password=0000;"
                 );
                 employee_conn.Open();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error occurs in this area. Please contact your administrator!");
+                MessageBox.Show("Connection error: " + ex.Message);
             }
         }
 
-        // ─── COMMAND ──────────────────────────────────────────────────────────────
         public void employee_cmd()
         {
             try
             {
                 employee_command = new SqlCommand(employee_sql, employee_conn);
+                employee_command.CommandType = CommandType.Text;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error occurs in this area. Please contact your administrator!");
+                MessageBox.Show("Command error: " + ex.Message);
             }
         }
 
@@ -50,9 +48,9 @@ namespace ACOTIN_POS_APPLICATION
             {
                 employee_adapter = new SqlDataAdapter(employee_command);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error occurs in this area. Please contact your administrator!");
+                MessageBox.Show("Adapter error: " + ex.Message);
             }
         }
 
@@ -61,11 +59,11 @@ namespace ACOTIN_POS_APPLICATION
             try
             {
                 employee_sql_dataset = new DataSet();
-                employee_adapter.Fill(employee_sql_dataset);
+                employee_adapter.Fill(employee_sql_dataset, "employeeTbl");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error occurs in this area. Please contact your administrator!");
+                MessageBox.Show("Dataset error: " + ex.Message);
             }
         }
 
@@ -78,9 +76,9 @@ namespace ACOTIN_POS_APPLICATION
                 employee_adapter.InsertCommand = new SqlCommand(employee_sql, employee_conn);
                 employee_adapter.InsertCommand.ExecuteNonQuery();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error occurs in this area. Please contact your administrator!");
+                MessageBox.Show("Insert error: " + ex.Message);
             }
         }
 
@@ -93,9 +91,9 @@ namespace ACOTIN_POS_APPLICATION
                 employee_adapter.UpdateCommand = new SqlCommand(employee_sql, employee_conn);
                 employee_adapter.UpdateCommand.ExecuteNonQuery();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error occurs in this area. Please contact your administrator!");
+                MessageBox.Show("Update error: " + ex.Message);
             }
         }
 
@@ -108,16 +106,10 @@ namespace ACOTIN_POS_APPLICATION
                 employee_adapter.DeleteCommand = new SqlCommand(employee_sql, employee_conn);
                 employee_adapter.DeleteCommand.ExecuteNonQuery();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                MessageBox.Show("Error occurs in this area. Please contact your administrator!");
+                MessageBox.Show("Delete error: " + ex.Message);
             }
-        }
-
-        // ─── SELECT ALL (default query) ───────────────────────────────────────────
-        public void employee_select()
-        {
-            employee_sql = "SELECT * FROM employeeTbl";
         }
     }
 }

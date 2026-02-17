@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
 
-namespace ACOTIN_POS_APPLICATION
+namespace Product_Elective
 {
     public partial class Save_Product : Form
     {

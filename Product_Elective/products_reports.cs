@@ -8,7 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ACOTIN_POS_APPLICATION
+namespace Product_Elective
+
 {
     public partial class products_reports : Form
     {
