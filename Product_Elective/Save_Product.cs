@@ -382,5 +382,21 @@ namespace Product_Elective
                 MessageBox.Show("No image selected!");
             }
         }
-    }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void quantityTxtbox1_TextChanged(object sender, EventArgs e)
+        {
+            int qty = 0;
+            int.TryParse(quantityTxtbox1.Text, out qty);
+
+            if (qty < 5)
+                quantityTxtbox1.ForeColor = Color.Brown;
+            else
+                quantityTxtbox1.ForeColor = Color.Green;
+        }
+     }
 }

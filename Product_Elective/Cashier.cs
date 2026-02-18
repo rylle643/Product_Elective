@@ -7,11 +7,9 @@ namespace Product_Elective
 {
     public partial class Cashier : Form
     {
-        // ─── DATABASE ─────────────────────────────────────────────────────────────
         ProductDatabase productdb_connect = new ProductDatabase();
         employee_dbconnection empdb_connect = new employee_dbconnection();
 
-        // ─── TRANSACTION INFO ─────────────────────────────────────────────────────
         private int selectedQuantity = 1;
         private string lastPaymentType = "";
         private decimal lastAmountPaid = 0;
@@ -26,7 +24,6 @@ namespace Product_Elective
             InitializeComponent();
         }
 
-        // ─── LOAD ─────────────────────────────────────────────────────────────────
         private void Cashier_Load(object sender, EventArgs e)
         {
             time_dateLabel.Text = DateTime.Now.ToString("MMMM dd, yyyy");
@@ -35,7 +32,6 @@ namespace Product_Elective
             SearchtextBox.Focus();
         }
 
-        // ─── GRID SETUP ───────────────────────────────────────────────────────────
         private void SetupOrderGrid()
         {
             OrderGridView.Columns.Clear();
@@ -83,7 +79,7 @@ namespace Product_Elective
             OrderGridView.Columns["colTotal"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
         }
 
-        // ─── LOAD EMPLOYEES ───────────────────────────────────────────────────────
+        // put the emp id in the combo box and display the name of the employee
         private void LoadEmployees()
         {
             try
@@ -117,7 +113,6 @@ namespace Product_Elective
             }
         }
 
-        // ─── CASHIER COMBOBOX ─────────────────────────────────────────────────────
         private void cashier_comboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
@@ -149,8 +144,7 @@ namespace Product_Elective
                 MessageBox.Show("Error occurs in this area. Please contact your administrator for this matter!!!");
             }
         }
-
-        // ─── SEARCH PRODUCT ───────────────────────────────────────────────────────
+        //Search barcode of product
         private void button14_Click(object sender, EventArgs e)
         {
             try
@@ -233,7 +227,7 @@ namespace Product_Elective
             }
         }
 
-        // ─── UPDATE GRAND TOTAL ───────────────────────────────────────────────────
+        
         private void UpdateTotalPrice()
         {
             decimal grandTotal = 0;
@@ -251,7 +245,7 @@ namespace Product_Elective
             priceTxtbox1.Text = "₱" + grandTotal.ToString("#,##0.00");
         }
 
-        // ─── CLEAR ALL ────────────────────────────────────────────────────────────
+       
         private void ClearAll()
         {
             OrderGridView.Rows.Clear();
@@ -269,7 +263,7 @@ namespace Product_Elective
             SearchtextBox.Focus();
         }
 
-        // ─── DEDUCT STOCK ─────────────────────────────────────────────────────────
+        
         private void DeductStockFromDatabase()
         {
             try
@@ -293,7 +287,7 @@ namespace Product_Elective
             }
         }
 
-        // ─── OPEN RECEIPT ─────────────────────────────────────────────────────────
+        // inside the receipt
         private void OpenReceipt(string paymentType, decimal amountPaid, decimal change)
         {
             try
@@ -337,7 +331,7 @@ namespace Product_Elective
             }
         }
 
-        // ─── QUANTITY BUTTON ──────────────────────────────────────────────────────
+        // Select the quantity
         private void button1_Click(object sender, EventArgs e)
         {
             Product_Elective.Quantity quantityForm = new Product_Elective.Quantity();
@@ -350,7 +344,7 @@ namespace Product_Elective
             }
         }
 
-        // ─── DISCOUNT BUTTON ──────────────────────────────────────────────────────
+        // select discount
         private void button9_Click(object sender, EventArgs e)
         {
             try
@@ -368,7 +362,6 @@ namespace Product_Elective
                 lastDiscountType = discountForm.DiscountType;
                 lastDiscountRate = discountForm.DiscountRate;
 
-                // ✅ Debug — remove this after confirming it works
                 MessageBox.Show("Type: " + lastDiscountType + " | Rate: " + lastDiscountRate);
 
                 foreach (DataGridViewRow row in OrderGridView.Rows)
@@ -400,7 +393,7 @@ namespace Product_Elective
             }
         }
 
-        // ─── PAYMENT BUTTON ───────────────────────────────────────────────────────
+        // payment type
         private void Paymentbutton_Click_1(object sender, EventArgs e)
         {
             try
@@ -446,7 +439,7 @@ namespace Product_Elective
             }
         }
 
-        // ─── PRINT BUTTON ─────────────────────────────────────────────────────────
+        //print receipt
         private void Printbutton_Click(object sender, EventArgs e)
         {
             try
@@ -465,7 +458,7 @@ namespace Product_Elective
             }
         }
 
-        // ─── SAVE SALE BUTTON ─────────────────────────────────────────────────────
+        // save transaction to database
         private void button13_Click(object sender, EventArgs e)
         {
             try
@@ -505,7 +498,7 @@ namespace Product_Elective
             }
         }
 
-        // ─── LOYALTY BUTTON ───────────────────────────────────────────────────────
+        // select loyalty points
         private void button7_Click(object sender, EventArgs e)
         {
             try
@@ -547,6 +540,7 @@ namespace Product_Elective
         private void button5_Click(object sender, EventArgs e) { ClearAll(); }
         private void button3_Click(object sender, EventArgs e) { ClearAll(); }
 
+        // Remove selected item from order
         private void button6_Click(object sender, EventArgs e)
         {
             if (OrderGridView.SelectedRows.Count > 0)
@@ -560,11 +554,13 @@ namespace Product_Elective
             }
         }
 
+        // Open cash drawer
         private void button11_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Cash drawer is now open!", "Drawer Open", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        // Hold transaction
         private void button4_Click(object sender, EventArgs e)
         {
             if (OrderGridView.Rows.Count == 0)
@@ -575,6 +571,7 @@ namespace Product_Elective
             MessageBox.Show("Transaction has been put on hold.", "Transaction Held", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
+        // Cancel transaction
         private void button10_Click(object sender, EventArgs e) { this.Close(); }
         private void OrderGridView_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
     }

@@ -38,10 +38,11 @@
             // button2
             // 
             this.button2.BackColor = System.Drawing.Color.Brown;
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button2.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button2.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button2.ForeColor = System.Drawing.Color.White;
-            this.button2.Location = new System.Drawing.Point(477, 259);
+            this.button2.Location = new System.Drawing.Point(430, 332);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(177, 78);
             this.button2.TabIndex = 25;
@@ -52,10 +53,11 @@
             // button1
             // 
             this.button1.BackColor = System.Drawing.Color.Green;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button1.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(155, 259);
+            this.button1.Location = new System.Drawing.Point(184, 332);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(177, 78);
             this.button1.TabIndex = 24;
@@ -66,7 +68,7 @@
             // NametextBox
             // 
             this.NametextBox.Font = new System.Drawing.Font("Segoe UI", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.NametextBox.Location = new System.Drawing.Point(65, 151);
+            this.NametextBox.Location = new System.Drawing.Point(64, 181);
             this.NametextBox.Name = "NametextBox";
             this.NametextBox.Size = new System.Drawing.Size(667, 54);
             this.NametextBox.TabIndex = 23;
@@ -75,8 +77,8 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.Black;
-            this.label2.Location = new System.Drawing.Point(150, 113);
+            this.label2.ForeColor = System.Drawing.Color.Gray;
+            this.label2.Location = new System.Drawing.Point(149, 143);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(212, 25);
             this.label2.TabIndex = 22;
@@ -85,11 +87,11 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.Black;
-            this.label1.Location = new System.Drawing.Point(289, 60);
+            this.label1.Font = new System.Drawing.Font("Segoe UI Black", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.ForeColor = System.Drawing.Color.PaleVioletRed;
+            this.label1.Location = new System.Drawing.Point(261, 46);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(199, 37);
+            this.label1.Size = new System.Drawing.Size(267, 47);
             this.label1.TabIndex = 21;
             this.label1.Text = "Loyalty Points";
             // 
@@ -97,6 +99,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.LavenderBlush;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);

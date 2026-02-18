@@ -110,6 +110,8 @@
             // button13
             // 
             this.button13.BackColor = System.Drawing.Color.Green;
+            this.button13.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button13.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button13.Font = new System.Drawing.Font("Segoe UI Black", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button13.ForeColor = System.Drawing.Color.White;
             this.button13.Location = new System.Drawing.Point(17, 834);
@@ -122,73 +124,93 @@
             // 
             // button10
             // 
+            this.button10.BackColor = System.Drawing.Color.White;
+            this.button10.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button10.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button10.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button10.Location = new System.Drawing.Point(301, 701);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(136, 127);
             this.button10.TabIndex = 240;
             this.button10.Text = "LOGOUT";
-            this.button10.UseVisualStyleBackColor = true;
+            this.button10.UseVisualStyleBackColor = false;
             this.button10.Click += new System.EventHandler(this.button10_Click);
             // 
             // button11
             // 
+            this.button11.BackColor = System.Drawing.Color.White;
+            this.button11.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button11.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button11.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button11.Location = new System.Drawing.Point(159, 701);
             this.button11.Name = "button11";
             this.button11.Size = new System.Drawing.Size(136, 127);
             this.button11.TabIndex = 239;
             this.button11.Text = "DRAWER";
-            this.button11.UseVisualStyleBackColor = true;
+            this.button11.UseVisualStyleBackColor = false;
             this.button11.Click += new System.EventHandler(this.button11_Click);
             // 
             // Printbutton
             // 
+            this.Printbutton.BackColor = System.Drawing.Color.White;
+            this.Printbutton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Printbutton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.Printbutton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Printbutton.Location = new System.Drawing.Point(17, 701);
             this.Printbutton.Name = "Printbutton";
             this.Printbutton.Size = new System.Drawing.Size(136, 127);
             this.Printbutton.TabIndex = 238;
             this.Printbutton.Text = "PRINT";
-            this.Printbutton.UseVisualStyleBackColor = true;
+            this.Printbutton.UseVisualStyleBackColor = false;
             this.Printbutton.Click += new System.EventHandler(this.Printbutton_Click);
             // 
             // button7
             // 
+            this.button7.BackColor = System.Drawing.Color.White;
+            this.button7.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button7.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button7.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button7.Location = new System.Drawing.Point(301, 559);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(136, 127);
             this.button7.TabIndex = 237;
             this.button7.Text = "LOYALTY";
-            this.button7.UseVisualStyleBackColor = true;
+            this.button7.UseVisualStyleBackColor = false;
             this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // Paymentbutton
             // 
+            this.Paymentbutton.BackColor = System.Drawing.Color.White;
+            this.Paymentbutton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.Paymentbutton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.Paymentbutton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Paymentbutton.Location = new System.Drawing.Point(159, 559);
             this.Paymentbutton.Name = "Paymentbutton";
             this.Paymentbutton.Size = new System.Drawing.Size(136, 127);
             this.Paymentbutton.TabIndex = 236;
             this.Paymentbutton.Text = "PAYMENT TYPE";
-            this.Paymentbutton.UseVisualStyleBackColor = true;
+            this.Paymentbutton.UseVisualStyleBackColor = false;
             this.Paymentbutton.Click += new System.EventHandler(this.Paymentbutton_Click_1);
             // 
             // button9
             // 
+            this.button9.BackColor = System.Drawing.Color.White;
+            this.button9.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button9.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button9.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button9.Location = new System.Drawing.Point(17, 559);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(136, 127);
             this.button9.TabIndex = 235;
             this.button9.Text = "DISCOUNT";
-            this.button9.UseVisualStyleBackColor = true;
+            this.button9.UseVisualStyleBackColor = false;
             this.button9.Click += new System.EventHandler(this.button9_Click);
             // 
             // button4
             // 
             this.button4.BackColor = System.Drawing.Color.Goldenrod;
+            this.button4.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button4.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button4.ForeColor = System.Drawing.Color.White;
             this.button4.Location = new System.Drawing.Point(301, 419);
@@ -202,6 +224,8 @@
             // button5
             // 
             this.button5.BackColor = System.Drawing.Color.Brown;
+            this.button5.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button5.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button5.ForeColor = System.Drawing.Color.White;
             this.button5.Location = new System.Drawing.Point(159, 419);
@@ -215,6 +239,8 @@
             // button6
             // 
             this.button6.BackColor = System.Drawing.Color.Brown;
+            this.button6.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button6.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button6.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button6.ForeColor = System.Drawing.Color.White;
             this.button6.Location = new System.Drawing.Point(17, 419);
@@ -228,6 +254,8 @@
             // button3
             // 
             this.button3.BackColor = System.Drawing.Color.SteelBlue;
+            this.button3.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button3.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button3.ForeColor = System.Drawing.Color.White;
             this.button3.Location = new System.Drawing.Point(301, 281);
@@ -240,23 +268,29 @@
             // 
             // button2
             // 
+            this.button2.BackColor = System.Drawing.Color.White;
+            this.button2.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button2.Location = new System.Drawing.Point(159, 281);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(136, 127);
             this.button2.TabIndex = 230;
             this.button2.Text = "PRICE";
-            this.button2.UseVisualStyleBackColor = true;
+            this.button2.UseVisualStyleBackColor = false;
             // 
             // button1
             // 
+            this.button1.BackColor = System.Drawing.Color.White;
+            this.button1.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.Location = new System.Drawing.Point(17, 281);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(136, 127);
             this.button1.TabIndex = 229;
             this.button1.Text = "QUANTITY";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // priceTxtbox1
@@ -284,6 +318,8 @@
             // button14
             // 
             this.button14.BackColor = System.Drawing.SystemColors.Control;
+            this.button14.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button14.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.button14.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button14.ForeColor = System.Drawing.SystemColors.WindowFrame;
             this.button14.Location = new System.Drawing.Point(1253, 56);
