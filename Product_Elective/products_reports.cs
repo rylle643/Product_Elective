@@ -15,17 +15,6 @@ namespace Product_Elective
     {
         ProductDatabase productdb_connect = new ProductDatabase();
 
-        // ─── COLOR PALETTE (LavenderBlush → PaleVioletRed spectrum) ──────────────
-        //
-        //  LavenderBlush    = RGB(255, 240, 245)  ← lightest
-        //  Blush Tint       = RGB(252, 228, 237)  ← 20% into spectrum
-        //  Soft Rose        = RGB(244, 210, 224)  ← 40% into spectrum
-        //  Rosy Mid         = RGB(236, 176, 200)  ← 60% into spectrum  (hover)
-        //  Muted VioletRose = RGB(228, 144, 173)  ← 80% into spectrum  (selection)
-        //  PaleVioletRed    = RGB(219, 112, 147)  ← richest             (header)
-        //
-        // ─────────────────────────────────────────────────────────────────────────
-
         public products_reports()
         {
             productdb_connect.product_connString();
@@ -108,9 +97,9 @@ namespace Product_Elective
 
             // Right-align numeric columns
             if (dataGridView1.Columns.Contains("price"))
-                dataGridView1.Columns["price"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dataGridView1.Columns["price"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
             if (dataGridView1.Columns.Contains("quantity"))
-                dataGridView1.Columns["quantity"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                dataGridView1.Columns["quantity"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
 
             // Format price column with ₱ sign
             if (dataGridView1.Columns.Contains("price"))
