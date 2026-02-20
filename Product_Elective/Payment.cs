@@ -149,5 +149,10 @@ namespace Product_Elective
             this.DialogResult = DialogResult.Cancel;
             this.Close();
         }
+
+        private void textBox1_TextChanged_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }
