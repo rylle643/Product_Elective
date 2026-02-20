@@ -100,7 +100,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.label1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.label1.Location = new System.Drawing.Point(13, 140);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(68, 21);
@@ -276,8 +276,9 @@
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(136, 127);
             this.button2.TabIndex = 230;
-            this.button2.Text = "PRICE";
+            this.button2.Text = "REFUND";
             this.button2.UseVisualStyleBackColor = false;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button1
             // 
@@ -308,7 +309,7 @@
             // 
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.ForeColor = System.Drawing.SystemColors.GrayText;
+            this.label14.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.label14.Location = new System.Drawing.Point(13, 13);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(131, 21);

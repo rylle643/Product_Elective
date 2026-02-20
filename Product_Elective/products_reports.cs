@@ -24,8 +24,8 @@ namespace Product_Elective
         private void StyleDataGridView()
         {
             dataGridView1.BorderStyle = BorderStyle.None;
-            dataGridView1.BackgroundColor = Color.FromArgb(255, 240, 245);   // LavenderBlush — lightest
-            dataGridView1.GridColor = Color.FromArgb(244, 210, 224);   // Soft Rose — subtle divider
+            dataGridView1.BackgroundColor = Color.White;
+            dataGridView1.GridColor = Color.FromArgb(200, 180, 190);
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.AllowUserToAddRows = false;
             dataGridView1.AllowUserToDeleteRows = false;
@@ -35,34 +35,34 @@ namespace Product_Elective
             dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             dataGridView1.ColumnHeadersHeight = 42;
-            dataGridView1.RowTemplate.Height = 36;
+            dataGridView1.RowTemplate.Height = 38;
             dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             dataGridView1.EnableHeadersVisualStyles = false;
 
-            // ── Column Header — PaleVioletRed (richest end of spectrum) ──────────
-            dataGridView1.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(219, 112, 147);  // PaleVioletRed
+            // ── Column Header ────────────────────────────────────────────────────
+            dataGridView1.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(160, 50, 90);
             dataGridView1.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dataGridView1.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            dataGridView1.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI Semibold", 11.5F, FontStyle.Bold);
             dataGridView1.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridView1.ColumnHeadersDefaultCellStyle.Padding = new Padding(5, 0, 5, 0);
-            dataGridView1.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(219, 112, 147);
+            dataGridView1.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(160, 50, 90);
             dataGridView1.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.White;
 
-            // ── Even Rows — LavenderBlush (lightest end) ─────────────────────────
-            dataGridView1.DefaultCellStyle.BackColor = Color.FromArgb(255, 240, 245);   // LavenderBlush
-            dataGridView1.DefaultCellStyle.ForeColor = Color.FromArgb(100, 40, 70);     // deep rose text — readable
-            dataGridView1.DefaultCellStyle.Font = new Font("Segoe UI", 9.5F);
-            dataGridView1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView1.DefaultCellStyle.SelectionBackColor = Color.FromArgb(228, 144, 173);   // 80% spectrum — selection
+            // ── Even Rows ────────────────────────────────────────────────────────
+            dataGridView1.DefaultCellStyle.BackColor = Color.White;
+            dataGridView1.DefaultCellStyle.ForeColor = Color.FromArgb(30, 10, 20);
+            dataGridView1.DefaultCellStyle.Font = new Font("Segoe UI", 11F);
+            dataGridView1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;   // DEFAULT = LEFT
+            dataGridView1.DefaultCellStyle.SelectionBackColor = Color.FromArgb(180, 70, 110);
             dataGridView1.DefaultCellStyle.SelectionForeColor = Color.White;
-            dataGridView1.DefaultCellStyle.Padding = new Padding(5, 0, 5, 0);
+            dataGridView1.DefaultCellStyle.Padding = new Padding(8, 0, 5, 0);
 
-            // ── Odd Rows — Blush Tint (20% into spectrum, just one step darker) ──
-            dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(252, 228, 237);   // Blush Tint
-            dataGridView1.AlternatingRowsDefaultCellStyle.ForeColor = Color.FromArgb(100, 40, 70);
-            dataGridView1.AlternatingRowsDefaultCellStyle.Font = new Font("Segoe UI", 9.5F);
-            dataGridView1.AlternatingRowsDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView1.AlternatingRowsDefaultCellStyle.SelectionBackColor = Color.FromArgb(228, 144, 173);
+            // ── Odd Rows ─────────────────────────────────────────────────────────
+            dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 240, 242);
+            dataGridView1.AlternatingRowsDefaultCellStyle.ForeColor = Color.FromArgb(30, 10, 20);
+            dataGridView1.AlternatingRowsDefaultCellStyle.Font = new Font("Segoe UI", 11F);
+            dataGridView1.AlternatingRowsDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;   // DEFAULT = LEFT
+            dataGridView1.AlternatingRowsDefaultCellStyle.SelectionBackColor = Color.FromArgb(180, 70, 110);
             dataGridView1.AlternatingRowsDefaultCellStyle.SelectionForeColor = Color.White;
         }
 
@@ -70,6 +70,9 @@ namespace Product_Elective
         {
             foreach (DataGridViewColumn col in dataGridView1.Columns)
             {
+                // Set all columns to MiddleLeft by default
+                col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+
                 switch (col.Name)
                 {
                     case "product_name": col.HeaderText = "Product Name"; col.FillWeight = 180; break;
@@ -87,15 +90,13 @@ namespace Product_Elective
                 }
             }
 
-            // Left-align text-heavy columns
-            if (dataGridView1.Columns.Contains("product_name"))
-                dataGridView1.Columns["product_name"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            if (dataGridView1.Columns.Contains("description"))
-                dataGridView1.Columns["description"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            if (dataGridView1.Columns.Contains("brand"))
-                dataGridView1.Columns["brand"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            // All text columns — explicitly MiddleLeft (overrides anything inherited)
+            string[] leftAlignCols = { "product_name", "description", "brand", "category", "unit", "productid", "date_added", "date_expiration" };
+            foreach (string colName in leftAlignCols)
+                if (dataGridView1.Columns.Contains(colName))
+                    dataGridView1.Columns[colName].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
 
-            // Right-align numeric columns
+            // Numeric columns — MiddleLeft as requested
             if (dataGridView1.Columns.Contains("price"))
                 dataGridView1.Columns["price"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
             if (dataGridView1.Columns.Contains("quantity"))
@@ -134,14 +135,14 @@ namespace Product_Elective
             optionInputTxtbox.Focus();
         }
 
-        // ── Hover — Rosy Mid (60% into spectrum, natural step between rows & header)
+        // ── Hover ────────────────────────────────────────────────────────────────
         private void dataGridView1_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
             {
-                dataGridView1.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromArgb(236, 176, 200);  // Rosy Mid
-                dataGridView1.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.FromArgb(100, 40, 70);
-                dataGridView1.Rows[e.RowIndex].DefaultCellStyle.SelectionBackColor = Color.FromArgb(228, 144, 173);
+                dataGridView1.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromArgb(220, 170, 190);
+                dataGridView1.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.FromArgb(30, 10, 20);
+                dataGridView1.Rows[e.RowIndex].DefaultCellStyle.SelectionBackColor = Color.FromArgb(180, 70, 110);
             }
         }
 
@@ -150,11 +151,11 @@ namespace Product_Elective
             if (e.RowIndex >= 0)
             {
                 if (e.RowIndex % 2 == 0)
-                    dataGridView1.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromArgb(255, 240, 245);   // LavenderBlush
+                    dataGridView1.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.White;
                 else
-                    dataGridView1.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromArgb(252, 228, 237);   // Blush Tint
+                    dataGridView1.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.FromArgb(245, 240, 242);
 
-                dataGridView1.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.FromArgb(100, 40, 70);
+                dataGridView1.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.FromArgb(30, 10, 20);
             }
         }
 

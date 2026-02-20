@@ -14,17 +14,14 @@ namespace Product_Elective
 
         private void Quantity_Load(object sender, EventArgs e)
         {
-            // Set default value when the form loads
             if (string.IsNullOrEmpty(QuantitytextBox.Text))
                 QuantitytextBox.Text = "1";
-
             QuantitytextBox.Focus();
             QuantitytextBox.SelectAll();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            // Try parse the value that the user actually typed
             if (int.TryParse(QuantitytextBox.Text.Trim(), out int qty) && qty > 0)
             {
                 QuantityValue = qty;

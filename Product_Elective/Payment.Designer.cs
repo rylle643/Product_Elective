@@ -100,6 +100,7 @@
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(467, 35);
             this.textBox1.TabIndex = 34;
+            this.textBox1.Enter += new System.EventHandler(this.textBox1_Enter);  // ← THIS IS THE FIX
             // 
             // label5
             // 
@@ -120,6 +121,7 @@
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(308, 38);
             this.comboBox1.TabIndex = 32;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);  // ← ALSO ADD THIS
             // 
             // label4
             // 

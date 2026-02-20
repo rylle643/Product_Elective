@@ -1,18 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Product_Elective
 {
     public partial class Discount : Form
     {
+        // These values are read by Cashier.cs after the form closes
         public string DiscountType { get; private set; }
         public decimal DiscountRate { get; private set; }
 
@@ -23,29 +16,29 @@ namespace Product_Elective
 
         private void Discount_Load(object sender, EventArgs e)
         {
-            // Default to No Discount
+            // Default to No Discount when the form opens
             radioButton1.Checked = true;
         }
 
-        // ─── CONFIRM ──────────────────────────────────────────────────────────────
+        // ─── CONFIRM — just saves the selected discount and closes, no popup ───────
         private void button1_Click(object sender, EventArgs e)
         {
-            if (radioButton1.Checked)       // No Discount
+            if (radioButton1.Checked)           // No Discount
             {
                 DiscountType = "No Discount";
-                DiscountRate = 0;
+                DiscountRate = 0m;
             }
-            else if (radioButton2.Checked)  // Senior Citizen
+            else if (radioButton2.Checked)      // Senior Citizen
             {
                 DiscountType = "Senior Citizen";
                 DiscountRate = 0.30m;
             }
-            else if (radioButton3.Checked)  // PWD
+            else if (radioButton3.Checked)      // PWD
             {
                 DiscountType = "PWD";
                 DiscountRate = 0.25m;
             }
-            else if (radioButton4.Checked)  // Employee
+            else if (radioButton4.Checked)      // Employee
             {
                 DiscountType = "Employee";
                 DiscountRate = 0.20m;

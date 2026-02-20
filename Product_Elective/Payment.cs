@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Product_Elective
@@ -23,36 +24,67 @@ namespace Product_Elective
             label3.Text = "₱" + grandTotal.ToString("#,##0.00");
 
             comboBox1.Items.Clear();
-            comboBox1.Items.AddRange(new string[] { "Cash", "GCash", "Card", "Others" });
+            comboBox1.Items.AddRange(new string[] { "Cash", "E-Wallet", "Card", "Others" });
             comboBox1.SelectedIndex = 0;
 
             label7.Text = "₱0.00";
 
-            ToggleCashFields(true);
+            // Wire up the Enter event to block focus on non-cash mode
+            textBox1.Enter += textBox1_Enter;
+
+            SetCashMode();
         }
 
         // ─── PAYMENT TYPE CHANGED ─────────────────────────────────────────────────
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            bool isCash = comboBox1.Text == "Cash";
-            ToggleCashFields(isCash);
-
-            if (!isCash)
-            {
-                textBox1.Clear();
-                label7.Text = "₱0.00";
-            }
+            if (comboBox1.Text == "Cash")
+                SetCashMode();
+            else
+                SetNonCashMode();
         }
 
-        // ─── AMOUNT TEXTBOX — live change calculation ─────────────────────────────
+        // ─── Cash mode: white, editable, cashier types the amount ────────────────
+        private void SetCashMode()
+        {
+            textBox1.ReadOnly = false;
+            textBox1.BackColor = Color.White;
+            textBox1.ForeColor = Color.FromArgb(30, 10, 20);
+            textBox1.Clear();
+            label7.Text = "₱0.00";
+            textBox1.Focus();
+        }
+
+        // ─── Non-cash mode: gray, locked, shows the exact total ──────────────────
+        private void SetNonCashMode()
+        {
+            textBox1.ReadOnly = true;
+            textBox1.BackColor = Color.FromArgb(210, 210, 210);        // gray background
+            textBox1.ForeColor = Color.FromArgb(90, 90, 90);           // gray text
+            textBox1.Text = "₱" + grandTotal.ToString("#,##0.00"); // auto-fill exact amount
+            label7.Text = "₱0.00";
+            comboBox1.Focus();                                          // kick focus away from textbox
+        }
+
+        // ─── Bounce focus away if cashier clicks the locked textbox ──────────────
+        private void textBox1_Enter(object sender, EventArgs e)
+        {
+            if (textBox1.ReadOnly)
+                comboBox1.Focus();   // redirect focus back to combobox immediately
+        }
+
+        // ─── AMOUNT TEXTBOX — live change calculation (cash only) ─────────────────
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
+            if (comboBox1.Text != "Cash")
+                return;
+
             if (decimal.TryParse(textBox1.Text, out decimal amount))
             {
                 decimal change = amount - grandTotal;
                 label7.Text = change >= 0
                     ? "₱" + change.ToString("#,##0.00")
-                    : "₱0.00  (Not enough!)";
+                    : "⚠ Short by ₱" + Math.Abs(change).ToString("#,##0.00");
             }
             else
             {
@@ -60,52 +92,30 @@ namespace Product_Elective
             }
         }
 
-        // ─── CALCULATE BUTTON (button3) ───────────────────────────────────────────
+        // ─── CALCULATE BUTTON — updates change label, no popup ───────────────────
         private void button3_Click_1(object sender, EventArgs e)
         {
-            string type = comboBox1.Text;
-
-            if (type == "Cash")
+            if (comboBox1.Text == "Cash")
             {
-                if (!decimal.TryParse(textBox1.Text, out decimal amount) || amount < grandTotal)
+                if (!decimal.TryParse(textBox1.Text, out decimal amount))
                 {
-                    MessageBox.Show("Amount given is less than the total!", "Invalid Payment",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    label7.Text = "⚠ Enter a valid amount";
                     textBox1.Focus();
                     return;
                 }
 
                 decimal change = amount - grandTotal;
-
-                MessageBox.Show(
-                    "Payment Type:     " + type + "\n" +
-                    "Cash Given:       ₱" + amount.ToString("#,##0.00") + "\n" +
-                    "Total Amount:     ₱" + grandTotal.ToString("#,##0.00") + "\n" +
-                    "Change:           ₱" + change.ToString("#,##0.00"),
-                    "Payment Summary",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information
-                );
-
-                label7.Text = "₱" + change.ToString("#,##0.00");
+                label7.Text = change >= 0
+                    ? "₱" + change.ToString("#,##0.00")
+                    : "⚠ Short by ₱" + Math.Abs(change).ToString("#,##0.00");
             }
             else
             {
-                MessageBox.Show(
-                    "Payment Type:     " + type + "\n" +
-                    "Cash Given:       N/A" + "\n" +
-                    "Total Amount:     ₱" + grandTotal.ToString("#,##0.00") + "\n" +
-                    "Change:           ₱0.00",
-                    "Payment Summary",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information
-                );
-
                 label7.Text = "₱0.00";
             }
         }
 
-        // ─── CONFIRM (button1) — no auto print, just validate and close ───────────
+        // ─── CONFIRM — validates and closes, no popup ─────────────────────────────
         private void button1_Click(object sender, EventArgs e)
         {
             PaymentType = comboBox1.Text;
@@ -114,8 +124,7 @@ namespace Product_Elective
             {
                 if (!decimal.TryParse(textBox1.Text, out decimal amount) || amount < grandTotal)
                 {
-                    MessageBox.Show("Amount given is less than the total!", "Invalid Payment",
-                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    label7.Text = "⚠ Amount is not enough!";
                     textBox1.Focus();
                     return;
                 }
@@ -125,6 +134,7 @@ namespace Product_Elective
             }
             else
             {
+                // E-Wallet / Card / Others — exact amount, zero change
                 AmountPaid = grandTotal;
                 Change = 0;
             }
@@ -133,20 +143,11 @@ namespace Product_Elective
             this.Close();
         }
 
-        // ─── CANCEL (button2) ─────────────────────────────────────────────────────
+        // ─── CANCEL ───────────────────────────────────────────────────────────────
         private void button2_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.Cancel;
             this.Close();
-        }
-
-        // ─── HELPER ───────────────────────────────────────────────────────────────
-        private void ToggleCashFields(bool visible)
-        {
-            label5.Visible = visible;
-            textBox1.Visible = visible;
-            label6.Visible = visible;
-            label7.Visible = visible;
         }
     }
 }
