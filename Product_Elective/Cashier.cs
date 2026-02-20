@@ -72,14 +72,14 @@ namespace Product_Elective
             // Header row style
             OrderGridView.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(160, 50, 90);
             OrderGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            OrderGridView.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI Semibold", 11.5F, FontStyle.Bold);
+            OrderGridView.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI Semibold", 15F, FontStyle.Bold);
             OrderGridView.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             OrderGridView.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(160, 50, 90);
 
             // Normal row style
             OrderGridView.DefaultCellStyle.BackColor = Color.White;
             OrderGridView.DefaultCellStyle.ForeColor = Color.FromArgb(30, 10, 20);
-            OrderGridView.DefaultCellStyle.Font = new Font("Segoe UI", 11F);
+            OrderGridView.DefaultCellStyle.Font = new Font("Segoe UI", 14F);
             OrderGridView.DefaultCellStyle.SelectionBackColor = Color.FromArgb(180, 70, 110);
             OrderGridView.DefaultCellStyle.SelectionForeColor = Color.White;
             OrderGridView.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
@@ -89,13 +89,14 @@ namespace Product_Elective
             OrderGridView.AlternatingRowsDefaultCellStyle.ForeColor = Color.FromArgb(30, 10, 20);
             OrderGridView.AlternatingRowsDefaultCellStyle.SelectionBackColor = Color.FromArgb(180, 70, 110);
             OrderGridView.AlternatingRowsDefaultCellStyle.SelectionForeColor = Color.White;
+            OrderGridView.AlternatingRowsDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
             // Add columns
-            OrderGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "colBarcode", HeaderText = "Barcode", Width = 120 });
+            OrderGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "colBarcode", HeaderText = "Barcode", Width = 200 });
             OrderGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "colName", HeaderText = "Product Name", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
-            OrderGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "colPrice", HeaderText = "Price (₱)", Width = 110 });
-            OrderGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "colQty", HeaderText = "Qty", Width = 65 });
-            OrderGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "colTotal", HeaderText = "Total (₱)", Width = 120 });
+            OrderGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "colPrice", HeaderText = "Price (₱)", Width = 150 });
+            OrderGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "colQty", HeaderText = "Qty", Width = 90 });
+            OrderGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "colTotal", HeaderText = "Total (₱)", Width = 150 });
 
             OrderGridView.Columns["colPrice"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             OrderGridView.Columns["colTotal"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
@@ -131,10 +132,15 @@ namespace Product_Elective
         private void ResetSearchBox()
         {
             SearchtextBox.TextChanged -= SearchtextBox_TextChanged;
-            SearchtextBox.Text = "READY TO SCAN...";
-            SearchtextBox.ForeColor = Color.Gray;
+            SearchtextBox.Text = "";
+            SearchtextBox.ForeColor = Color.FromArgb(30, 10, 20);
             SearchtextBox.TextChanged += SearchtextBox_TextChanged;
-            SearchtextBox.Focus();
+
+            // Use BeginInvoke so focus happens AFTER the current event finishes
+            this.BeginInvoke(new Action(() =>
+            {
+                SearchtextBox.Focus();
+            }));
         }
 
         // ─────────────────────────────────────────────────────────────────────────

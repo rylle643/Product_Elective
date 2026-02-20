@@ -340,11 +340,11 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.Font = new System.Drawing.Font("Segoe UI Black", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(38, 17);
+            this.label9.Location = new System.Drawing.Point(38, 16);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(117, 21);
+            this.label9.Size = new System.Drawing.Size(142, 25);
             this.label9.TabIndex = 248;
             this.label9.Text = "EMPLOYEE ID:";
             this.label9.Click += new System.EventHandler(this.label9_Click);
@@ -352,18 +352,18 @@
             // cashier_comboBox
             // 
             this.cashier_comboBox.BackColor = System.Drawing.Color.PaleVioletRed;
-            this.cashier_comboBox.Font = new System.Drawing.Font("Segoe UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cashier_comboBox.Font = new System.Drawing.Font("Segoe UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cashier_comboBox.ForeColor = System.Drawing.Color.White;
             this.cashier_comboBox.FormattingEnabled = true;
-            this.cashier_comboBox.Location = new System.Drawing.Point(154, 15);
+            this.cashier_comboBox.Location = new System.Drawing.Point(186, 13);
             this.cashier_comboBox.Name = "cashier_comboBox";
-            this.cashier_comboBox.Size = new System.Drawing.Size(229, 28);
+            this.cashier_comboBox.Size = new System.Drawing.Size(229, 33);
             this.cashier_comboBox.TabIndex = 245;
             this.cashier_comboBox.SelectedIndexChanged += new System.EventHandler(this.cashier_comboBox_SelectedIndexChanged);
             // 
             // emp_fnameLabel
             // 
-            this.emp_fnameLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.emp_fnameLabel.Font = new System.Drawing.Font("Segoe UI Black", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.emp_fnameLabel.ForeColor = System.Drawing.Color.White;
             this.emp_fnameLabel.Location = new System.Drawing.Point(1513, 12);
             this.emp_fnameLabel.Name = "emp_fnameLabel";
@@ -375,7 +375,7 @@
             // 
             // emp_surnameLabel
             // 
-            this.emp_surnameLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.emp_surnameLabel.Font = new System.Drawing.Font("Segoe UI Black", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.emp_surnameLabel.ForeColor = System.Drawing.Color.White;
             this.emp_surnameLabel.Location = new System.Drawing.Point(1670, 12);
             this.emp_surnameLabel.Name = "emp_surnameLabel";
@@ -387,9 +387,9 @@
             // 
             // time_dateLabel
             // 
-            this.time_dateLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.time_dateLabel.Font = new System.Drawing.Font("Segoe UI Black", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.time_dateLabel.ForeColor = System.Drawing.Color.White;
-            this.time_dateLabel.Location = new System.Drawing.Point(828, 12);
+            this.time_dateLabel.Location = new System.Drawing.Point(828, 11);
             this.time_dateLabel.Name = "time_dateLabel";
             this.time_dateLabel.Size = new System.Drawing.Size(202, 30);
             this.time_dateLabel.TabIndex = 5;
