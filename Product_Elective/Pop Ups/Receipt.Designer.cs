@@ -38,7 +38,7 @@
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Segoe UI Black", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.PaleVioletRed;
-            this.label2.Location = new System.Drawing.Point(126, 48);
+            this.label2.Location = new System.Drawing.Point(116, 46);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(126, 37);
             this.label2.TabIndex = 15;
@@ -49,7 +49,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI Black", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.PaleVioletRed;
-            this.label1.Location = new System.Drawing.Point(83, 11);
+            this.label1.Location = new System.Drawing.Point(73, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(215, 37);
             this.label1.TabIndex = 14;
@@ -62,7 +62,7 @@
             this.printDisplayListbox.ItemHeight = 15;
             this.printDisplayListbox.Location = new System.Drawing.Point(11, 88);
             this.printDisplayListbox.Name = "printDisplayListbox";
-            this.printDisplayListbox.Size = new System.Drawing.Size(366, 589);
+            this.printDisplayListbox.Size = new System.Drawing.Size(332, 589);
             this.printDisplayListbox.TabIndex = 13;
             // 
             // Receipt
@@ -70,7 +70,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LavenderBlush;
-            this.ClientSize = new System.Drawing.Size(389, 689);
+            this.ClientSize = new System.Drawing.Size(352, 689);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.printDisplayListbox);

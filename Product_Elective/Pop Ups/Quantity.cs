@@ -14,32 +14,36 @@ namespace Product_Elective
 
         private void Quantity_Load(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(QuantitytextBox.Text))
-                QuantitytextBox.Text = "1";
+            QuantitytextBox.Value = 1;  // NumericUpDown uses .Value not .Text
             QuantitytextBox.Focus();
-            QuantitytextBox.SelectAll();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (int.TryParse(QuantitytextBox.Text.Trim(), out int qty) && qty > 0)
-            {
-                QuantityValue = qty;
-                this.DialogResult = DialogResult.OK;
-                this.Close();
-            }
-            else
-            {
-                MessageBox.Show("Please enter a valid quantity!");
-                QuantitytextBox.Focus();
-                QuantitytextBox.SelectAll();
-            }
+            QuantityValue = (int)QuantitytextBox.Value;
+            this.DialogResult = DialogResult.OK;
+            this.Close();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             this.DialogResult = DialogResult.Cancel;
             this.Close();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void btnMinus_Click(object sender, EventArgs e)
+        {
+            if (QuantitytextBox.Value > 1)
+                QuantitytextBox.Value--;
+        }
+
+        private void btnPlus_Click(object sender, EventArgs e)
+        {
+            QuantitytextBox.Value++;
         }
     }
 }

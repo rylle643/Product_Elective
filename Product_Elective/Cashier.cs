@@ -819,5 +819,25 @@ namespace Product_Elective
         private void button10_Click(object sender, EventArgs e) { this.Close(); }
 
         private void OrderGridView_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void emp_surnameLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void emp_fnameLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label14_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

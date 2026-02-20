@@ -21,6 +21,9 @@ namespace Product_Elective
         private Image pic;
         OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
 
+        // Timer for auto-search delay (so it doesn't search every single keypress)
+        private Timer searchTimer = new Timer();
+
         private string GetCleanPrice()
         {
             return priceTxtbox1.Text.Replace("₱", "").Trim();
@@ -37,197 +40,91 @@ namespace Product_Elective
             productdb_connect.product_connString();
             InitializeComponent();
             this.WindowState = FormWindowState.Maximized;
+
+            // Setup auto-search timer (waits 600ms after user stops typing)
+            searchTimer.Interval = 100;
+            searchTimer.Tick += SearchTimer_Tick;
         }
 
         private void POS_Admin_Load(object sender, EventArgs e)
         {
             try
             {
-                picpathTxtbox1.Hide(); 
-                barcodeTxtbox1.Hide(); 
+                picpathTxtbox1.Hide();
+                barcodeTxtbox1.Hide();
 
-                comboBoxCategory.Items.Add("Food");
-                comboBoxCategory.Items.Add("Beverages");
-                comboBoxCategory.Items.Add("Electronics");
-                comboBoxCategory.Items.Add("Clothing");
-                comboBoxCategory.Items.Add("Footwear");
-                comboBoxCategory.Items.Add("School Supplies");
-                comboBoxCategory.Items.Add("Office Supplies");
-                comboBoxCategory.Items.Add("Household Items");
-                comboBoxCategory.Items.Add("Personal Care");
-                comboBoxCategory.Items.Add("Health & Medicine");
-                comboBoxCategory.Items.Add("Beauty Products");
-                comboBoxCategory.Items.Add("Baby Products");
-                comboBoxCategory.Items.Add("Sports & Fitness");
-                comboBoxCategory.Items.Add("Hardware & Tools");
-                comboBoxCategory.Items.Add("Pet Supplies");
-                comboBoxCategory.Items.Add("Toys & Games");
-                comboBoxCategory.Items.Add("Furniture");
-                comboBoxCategory.Items.Add("Automotive Supplies");
-                comboBoxCategory.Items.Add("Others");
+                comboBoxCategory.Items.Add("Smartphones");
+                comboBoxCategory.Items.Add("Laptops");
+                comboBoxCategory.Items.Add("Desktop Computers");
+                comboBoxCategory.Items.Add("Printers");
+                comboBoxCategory.Items.Add("Gaming Consoles");
+                comboBoxCategory.Items.Add("Audio Devices");
+                comboBoxCategory.Items.Add("Televisions");
+                comboBoxCategory.Items.Add("Cameras");
+                comboBoxCategory.Items.Add("Smartwatches");
+                comboBoxCategory.Items.Add("Networking Devices");
+                comboBoxCategory.Items.Add("Storage Devices");
+                comboBoxCategory.Items.Add("Smart Home");
+                comboBoxCategory.Items.Add("Accessories");
+                comboBoxCategory.Items.Add("Security Devices");
 
-                Barcode_Combobox.Focus();
+                Barcode_textBox.Focus();
             }
             catch (Exception)
             {
                 MessageBox.Show("Error occurs in this area. Please contact your administrator!");
             }
-
-            try
-            {
-
-            }
-            catch
-            {
-
-            }
         }
 
-        private void priceTxtbox1_TextChanged(object sender, EventArgs e)
+        // ── AUTO SEARCH LOGIC ────────────────────────────────────────────
+
+        // Fires every time user types in the barcode textbox
+        private void Barcode_textBox_TextChanged(object sender, EventArgs e)
         {
-            
-            priceTxtbox1.TextChanged -= priceTxtbox1_TextChanged;
+            // Restart timer each keystroke — only search after user pauses typing
+            searchTimer.Stop();
 
-            string clean = priceTxtbox1.Text.Replace("₱", "").Trim();
-
-            if (!string.IsNullOrWhiteSpace(clean))
-            {
-                priceTxtbox1.Text = "₱" + clean;
-                priceTxtbox1.SelectionStart = priceTxtbox1.Text.Length; 
-            }
+            if (Barcode_textBox.Text.Length >= 3)
+                searchTimer.Start();
             else
-            {
-                priceTxtbox1.Text = "";
-            }
-
-            priceTxtbox1.TextChanged += priceTxtbox1_TextChanged;
+                cleartextboxes(); // Clear form if barcode is too short
         }
 
-        private void priceTxtbox1_KeyDown(object sender, KeyEventArgs e)
+        // Fires after the delay — does the actual search
+        private void SearchTimer_Tick(object sender, EventArgs e)
         {
-            if (e.KeyCode == Keys.Back && priceTxtbox1.SelectionStart <= 1 && priceTxtbox1.Text.StartsWith("₱"))
-            {
-                if (priceTxtbox1.Text.Length <= 1 || priceTxtbox1.SelectionStart <= 1)
-                {
-                    e.SuppressKeyPress = true;
-                }
-            }
+            searchTimer.Stop();
+            SearchProduct(showWarning: false); // Silent search, no popups
+        }
 
-            if (e.KeyCode == Keys.Delete && priceTxtbox1.SelectionStart == 0)
+        // Allow pressing Enter to search manually
+        private void Barcode_textBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
             {
+                searchTimer.Stop();
+                SearchProduct(showWarning: true); // Manual search shows "not found" message
                 e.SuppressKeyPress = true;
             }
         }
 
-        private void priceTxtbox1_Click(object sender, EventArgs e)
-        {
-            if (priceTxtbox1.Text.StartsWith("₱") && priceTxtbox1.SelectionStart == 0)
-                priceTxtbox1.SelectionStart = 1;
-        }
+        // ── SHARED SEARCH METHOD ─────────────────────────────────────────
 
-        private void cleartextboxes()
+        private void SearchProduct(bool showWarning)
         {
             try
             {
-                pic = Resources.no_photo;
-                Barcode_Combobox.Text = "";                      
-                picpathTxtbox1.Clear();                           
-                barcodeTxtbox1.Clear();                            
-                pictureBox1.Image = pic;
-                pictureBox2.Image = pic;
-                priceTxtbox1.Clear();                            
-                quantityTxtbox1.Clear();
-                unitTxtbox1.Clear();
-                descriptionTxtbox1.Clear();
-                nameTxtbox1.Clear();
-                brandtextBox1.Clear();                            
-                comboBoxCategory.Text = "";                        
-                dateAddedPicker.Value = DateTime.Now;             
-                dateExpirationPicker.Value = DateTime.Now;         
-            }
-            catch (Exception)
-            {
-                MessageBox.Show("Error occurs in this area. Please contact your administrator!");
-            }
-        }
-
-        private void open_file_image()
-        {
-            OpenFileDialog1.Filter = "Image Files | *.jpg; *.jpeg; *.png; *.bmp";
-            OpenFileDialog1.ShowDialog();
-        }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void button6_Click(object sender, EventArgs e)
-        {
-            cleartextboxes();
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(Barcode_Combobox.Text))
-                {
-                    MessageBox.Show("Please enter a barcode/product ID!");
+                if (string.IsNullOrWhiteSpace(Barcode_textBox.Text))
                     return;
-                }
 
-                if (string.IsNullOrWhiteSpace(nameTxtbox1.Text))
-                {
-                    MessageBox.Show("Please enter a product name!");
-                    return;
-                }
-
-                string cleanPrice = GetCleanPrice(); 
-
-                productdb_connect.product_sql = "INSERT INTO productTbl " +
-                                                "(product_name, productid, quantity, price, unit, description, product_pic_path, barcode_pic_path, brand, category, date_added, date_expiration) " +
-                                                "VALUES ('" + nameTxtbox1.Text + "', " +
-                                                "'" + Barcode_Combobox.Text + "', " +
-                                                (string.IsNullOrWhiteSpace(quantityTxtbox1.Text) ? "0" : quantityTxtbox1.Text) + ", " +
-                                                (string.IsNullOrWhiteSpace(cleanPrice) ? "0" : cleanPrice) + ", " +
-                                                "'" + unitTxtbox1.Text + "', " +
-                                                "'" + descriptionTxtbox1.Text + "', " +
-                                                "'" + picpathTxtbox1.Text + "', " +
-                                                "'" + barcodeTxtbox1.Text + "', " +
-                                                "'" + brandtextBox1.Text + "', " +
-                                                "'" + comboBoxCategory.Text + "', " +
-                                                "'" + dateAddedPicker.Value.ToString("yyyy-MM-dd") + "', " +
-                                                "'" + dateExpirationPicker.Value.ToString("yyyy-MM-dd") + "')";
-                productdb_connect.product_cmd();
-                productdb_connect.product_sqladapterInsert();
-
-                MessageBox.Show("Product saved successfully!");
-                cleartextboxes();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error saving product: " + ex.Message);
-            }
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(Barcode_Combobox.Text))
-                {
-                    MessageBox.Show("Please enter a barcode to search!");
-                    return;
-                }
-
-                productdb_connect.product_sql = "SELECT * FROM productTbl WHERE productid = '" + Barcode_Combobox.Text + "'";
+                productdb_connect.product_sql = "SELECT * FROM productTbl WHERE productid = '" + Barcode_textBox.Text + "'";
                 productdb_connect.product_cmd();
                 productdb_connect.product_sqladapterSelect();
                 productdb_connect.product_sqldatasetSELECT();
 
                 if (productdb_connect.product_sql_dataset.Tables[0].Rows.Count > 0)
                 {
+                    // Product found — fill in all fields
                     nameTxtbox1.Text = productdb_connect.product_sql_dataset.Tables[0].Rows[0]["product_name"].ToString();
                     quantityTxtbox1.Text = productdb_connect.product_sql_dataset.Tables[0].Rows[0]["quantity"].ToString();
                     unitTxtbox1.Text = productdb_connect.product_sql_dataset.Tables[0].Rows[0]["unit"].ToString();
@@ -266,10 +163,28 @@ namespace Product_Elective
                             pictureBox2.Image = Image.FromFile(barcodeTxtbox1.Text);
                     }
                     catch { pictureBox2.Image = Resources.no_photo; }
+
+                    // Check stock level and show info (no popup, just color)
+                    int qty = 0;
+                    int.TryParse(quantityTxtbox1.Text, out qty);
+
+                    if (qty == 0)
+                        quantityTxtbox1.ForeColor = Color.Red;    // Out of stock
+                    else if (qty < 5)
+                        quantityTxtbox1.ForeColor = Color.Brown;  // Low stock
+                    else
+                        quantityTxtbox1.ForeColor = Color.Green;  // Good stock
                 }
                 else
                 {
-                    MessageBox.Show("Product not found!");
+                    // Product not found
+                    if (showWarning)
+                    {
+                        // Only show message if user manually searched (pressed Enter or Search button)
+                        MessageBox.Show("Product not found! You can add it as a new product.", "Not Found", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    // If auto-search, just silently clear — no popup
+                    ClearFieldsOnly(); // Clear fields but keep barcode text
                 }
             }
             catch (Exception ex)
@@ -278,11 +193,165 @@ namespace Product_Elective
             }
         }
 
+        // Clears all fields EXCEPT the barcode textbox
+        private void ClearFieldsOnly()
+        {
+            try
+            {
+                pic = Resources.no_photo;
+                picpathTxtbox1.Clear();
+                barcodeTxtbox1.Clear();
+                pictureBox1.Image = pic;
+                pictureBox2.Image = pic;
+                priceTxtbox1.Clear();
+                quantityTxtbox1.Clear();
+                unitTxtbox1.Clear();
+                descriptionTxtbox1.Clear();
+                nameTxtbox1.Clear();
+                brandtextBox1.Clear();
+                comboBoxCategory.SelectedIndex = -1;
+                dateAddedPicker.Value = DateTime.Now;
+                dateExpirationPicker.Value = DateTime.Now;
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Error occurs in this area. Please contact your administrator!");
+            }
+        }
+
+        // ── EXISTING METHODS (updated to use Barcode_textBox) ────────────
+
+        private void priceTxtbox1_TextChanged(object sender, EventArgs e)
+        {
+            priceTxtbox1.TextChanged -= priceTxtbox1_TextChanged;
+
+            string clean = priceTxtbox1.Text.Replace("₱", "").Trim();
+
+            if (!string.IsNullOrWhiteSpace(clean))
+            {
+                priceTxtbox1.Text = "₱" + clean;
+                priceTxtbox1.SelectionStart = priceTxtbox1.Text.Length;
+            }
+            else
+            {
+                priceTxtbox1.Text = "";
+            }
+
+            priceTxtbox1.TextChanged += priceTxtbox1_TextChanged;
+        }
+
+        private void priceTxtbox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Back && priceTxtbox1.SelectionStart <= 1 && priceTxtbox1.Text.StartsWith("₱"))
+            {
+                if (priceTxtbox1.Text.Length <= 1 || priceTxtbox1.SelectionStart <= 1)
+                    e.SuppressKeyPress = true;
+            }
+
+            if (e.KeyCode == Keys.Delete && priceTxtbox1.SelectionStart == 0)
+                e.SuppressKeyPress = true;
+        }
+
+        private void priceTxtbox1_Click(object sender, EventArgs e)
+        {
+            if (priceTxtbox1.Text.StartsWith("₱") && priceTxtbox1.SelectionStart == 0)
+                priceTxtbox1.SelectionStart = 1;
+        }
+
+        private void cleartextboxes()
+        {
+            try
+            {
+                pic = Resources.no_photo;
+                Barcode_textBox.Text = "";  // ← updated
+                picpathTxtbox1.Clear();
+                barcodeTxtbox1.Clear();
+                pictureBox1.Image = pic;
+                pictureBox2.Image = pic;
+                priceTxtbox1.Clear();
+                quantityTxtbox1.Clear();
+                unitTxtbox1.Clear();
+                descriptionTxtbox1.Clear();
+                nameTxtbox1.Clear();
+                brandtextBox1.Clear();
+                comboBoxCategory.SelectedIndex = -1;
+                dateAddedPicker.Value = DateTime.Now;
+                dateExpirationPicker.Value = DateTime.Now;
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Error occurs in this area. Please contact your administrator!");
+            }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            cleartextboxes();
+        }
+
+        // SAVE button
+        private void button2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(Barcode_textBox.Text))  // ← updated
+                {
+                    MessageBox.Show("Please enter a barcode/product ID!");
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(nameTxtbox1.Text))
+                {
+                    MessageBox.Show("Please enter a product name!");
+                    return;
+                }
+
+                string cleanPrice = GetCleanPrice();
+
+                productdb_connect.product_sql = "INSERT INTO productTbl " +
+                                                "(product_name, productid, quantity, price, unit, description, product_pic_path, barcode_pic_path, brand, category, date_added, date_expiration) " +
+                                                "VALUES ('" + nameTxtbox1.Text + "', " +
+                                                "'" + Barcode_textBox.Text + "', " +  // ← updated
+                                                (string.IsNullOrWhiteSpace(quantityTxtbox1.Text) ? "0" : quantityTxtbox1.Text) + ", " +
+                                                (string.IsNullOrWhiteSpace(cleanPrice) ? "0" : cleanPrice) + ", " +
+                                                "'" + unitTxtbox1.Text + "', " +
+                                                "'" + descriptionTxtbox1.Text + "', " +
+                                                "'" + picpathTxtbox1.Text + "', " +
+                                                "'" + barcodeTxtbox1.Text + "', " +
+                                                "'" + brandtextBox1.Text + "', " +
+                                                "'" + comboBoxCategory.Text + "', " +
+                                                "'" + dateAddedPicker.Value.ToString("yyyy-MM-dd") + "', " +
+                                                "'" + dateExpirationPicker.Value.ToString("yyyy-MM-dd") + "')";
+                productdb_connect.product_cmd();
+                productdb_connect.product_sqladapterInsert();
+
+                MessageBox.Show("Product saved successfully!");
+                cleartextboxes();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error saving product: " + ex.Message);
+            }
+        }
+
+        // SEARCH button (manual)
+        private void button1_Click(object sender, EventArgs e)
+        {
+            searchTimer.Stop();
+            SearchProduct(showWarning: true); // Manual = show "not found" message
+        }
+
+        // UPDATE button
         private void button4_Click(object sender, EventArgs e)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(Barcode_Combobox.Text))
+                if (string.IsNullOrWhiteSpace(Barcode_textBox.Text))  // ← updated
                 {
                     MessageBox.Show("Please enter a barcode!");
                     return;
@@ -302,7 +371,7 @@ namespace Product_Elective
                                                 "category = '" + comboBoxCategory.Text + "', " +
                                                 "date_added = '" + dateAddedPicker.Value.ToString("yyyy-MM-dd") + "', " +
                                                 "date_expiration = '" + dateExpirationPicker.Value.ToString("yyyy-MM-dd") + "' " +
-                                                "WHERE productid = '" + Barcode_Combobox.Text + "'";
+                                                "WHERE productid = '" + Barcode_textBox.Text + "'";  // ← updated
                 productdb_connect.product_cmd();
                 productdb_connect.product_sqladapterUpdate();
 
@@ -314,11 +383,12 @@ namespace Product_Elective
             }
         }
 
+        // DELETE button
         private void button3_Click(object sender, EventArgs e)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(Barcode_Combobox.Text))
+                if (string.IsNullOrWhiteSpace(Barcode_textBox.Text))  // ← updated
                 {
                     MessageBox.Show("Please enter a barcode to delete!");
                     return;
@@ -333,7 +403,7 @@ namespace Product_Elective
 
                 if (result == DialogResult.Yes)
                 {
-                    productdb_connect.product_sql = "DELETE FROM productTbl WHERE productid = '" + Barcode_Combobox.Text + "'";
+                    productdb_connect.product_sql = "DELETE FROM productTbl WHERE productid = '" + Barcode_textBox.Text + "'";  // ← updated
                     productdb_connect.product_cmd();
                     productdb_connect.product_sqladapterDelete();
 
@@ -385,7 +455,6 @@ namespace Product_Elective
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
-
         }
 
         private void quantityTxtbox1_TextChanged(object sender, EventArgs e)
@@ -393,10 +462,37 @@ namespace Product_Elective
             int qty = 0;
             int.TryParse(quantityTxtbox1.Text, out qty);
 
-            if (qty < 5)
-                quantityTxtbox1.ForeColor = Color.Brown;
+            if (qty == 0)
+                quantityTxtbox1.ForeColor = Color.Red;    // Out of stock
+            else if (qty < 5)
+                quantityTxtbox1.ForeColor = Color.Brown;  // Low stock
             else
-                quantityTxtbox1.ForeColor = Color.Green;
+                quantityTxtbox1.ForeColor = Color.Green;  // Good stock
         }
-     }
+
+        private void panel5_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void label13_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel2_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panel3_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+    }
 }

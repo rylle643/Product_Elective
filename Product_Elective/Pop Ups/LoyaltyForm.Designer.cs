@@ -33,6 +33,8 @@
             this.NametextBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // button2
@@ -88,12 +90,21 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Segoe UI Black", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.PaleVioletRed;
-            this.label1.Location = new System.Drawing.Point(261, 46);
+            this.label1.ForeColor = System.Drawing.Color.White;
+            this.label1.Location = new System.Drawing.Point(16, 27);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(267, 47);
+            this.label1.Size = new System.Drawing.Size(321, 47);
             this.label1.TabIndex = 21;
-            this.label1.Text = "Loyalty Points";
+            this.label1.Text = "LOYALTY POINTS";
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.PaleVioletRed;
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Location = new System.Drawing.Point(-4, -18);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(811, 79);
+            this.panel1.TabIndex = 26;
             // 
             // LoyaltyForm
             // 
@@ -101,14 +112,16 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LavenderBlush;
             this.ClientSize = new System.Drawing.Size(800, 360);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.NametextBox);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
             this.Name = "LoyaltyForm";
             this.Text = "LoyaltyForm";
             this.Load += new System.EventHandler(this.LoyaltyForm_Load);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -121,5 +134,6 @@
         private System.Windows.Forms.TextBox NametextBox;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Panel panel1;
     }
 }
