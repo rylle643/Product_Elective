@@ -58,13 +58,13 @@
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label3 = new System.Windows.Forms.Label();
             this.Barcode_textBox = new System.Windows.Forms.TextBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
             this.panel6 = new System.Windows.Forms.Panel();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panel1.SuspendLayout();
@@ -395,9 +395,9 @@
             this.pictureBox1.BackColor = System.Drawing.Color.White;
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox1.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.pictureBox1.Location = new System.Drawing.Point(162, 60);
+            this.pictureBox1.Location = new System.Drawing.Point(171, 92);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(575, 386);
+            this.pictureBox1.Size = new System.Drawing.Size(575, 373);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 80;
             this.pictureBox1.TabStop = false;
@@ -406,24 +406,13 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.PaleVioletRed;
-            this.panel1.Controls.Add(this.label3);
+            this.panel1.Controls.Add(this.label5);
             this.panel1.ForeColor = System.Drawing.Color.Transparent;
             this.panel1.Location = new System.Drawing.Point(-19, -1);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1950, 38);
+            this.panel1.Size = new System.Drawing.Size(1950, 66);
             this.panel1.TabIndex = 228;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Segoe UI Black", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.ForeColor = System.Drawing.Color.White;
-            this.label3.Location = new System.Drawing.Point(25, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(506, 37);
-            this.label3.TabIndex = 229;
-            this.label3.Text = "INVENTORY MANAGEMENT SYSTEM";
             // 
             // Barcode_textBox
             // 
@@ -445,7 +434,7 @@
             this.panel2.Controls.Add(this.Barcode_textBox);
             this.panel2.Controls.Add(this.label51);
             this.panel2.Controls.Add(this.barcodeTxtbox1);
-            this.panel2.Location = new System.Drawing.Point(162, 463);
+            this.panel2.Location = new System.Drawing.Point(171, 478);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(575, 319);
             this.panel2.TabIndex = 230;
@@ -459,7 +448,7 @@
             this.panel3.Controls.Add(this.label6);
             this.panel3.Controls.Add(this.comboBoxCategory);
             this.panel3.Controls.Add(this.label7);
-            this.panel3.Location = new System.Drawing.Point(162, 805);
+            this.panel3.Location = new System.Drawing.Point(171, 812);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(575, 224);
             this.panel3.TabIndex = 231;
@@ -470,7 +459,7 @@
             this.panel4.BackColor = System.Drawing.Color.PaleVioletRed;
             this.panel4.Controls.Add(this.label2);
             this.panel4.Controls.Add(this.priceTxtbox1);
-            this.panel4.Location = new System.Drawing.Point(965, 60);
+            this.panel4.Location = new System.Drawing.Point(965, 79);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(749, 144);
             this.panel4.TabIndex = 232;
@@ -491,7 +480,7 @@
             this.panel5.Controls.Add(this.label13);
             this.panel5.Controls.Add(this.label11);
             this.panel5.Controls.Add(this.label12);
-            this.panel5.Location = new System.Drawing.Point(965, 238);
+            this.panel5.Location = new System.Drawing.Point(965, 249);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(749, 544);
             this.panel5.TabIndex = 233;
@@ -507,10 +496,21 @@
             this.panel6.Controls.Add(this.button3);
             this.panel6.Controls.Add(this.button6);
             this.panel6.Controls.Add(this.button5);
-            this.panel6.Location = new System.Drawing.Point(965, 823);
+            this.panel6.Location = new System.Drawing.Point(965, 822);
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(749, 195);
             this.panel6.TabIndex = 234;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Segoe UI Black", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.ForeColor = System.Drawing.Color.White;
+            this.label5.Location = new System.Drawing.Point(23, 10);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(650, 47);
+            this.label5.TabIndex = 235;
+            this.label5.Text = "INVENTORY MANAGEMENT SYSTEM";
             // 
             // Save_Product
             // 
@@ -578,12 +578,12 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox Barcode_textBox;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Panel panel6;
+        private System.Windows.Forms.Label label5;
     }
 }
