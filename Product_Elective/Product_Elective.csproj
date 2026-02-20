@@ -61,23 +61,23 @@
     <Compile Include="Cashier.Designer.cs">
       <DependentUpon>Cashier.cs</DependentUpon>
     </Compile>
-    <Compile Include="Discount.cs">
+    <Compile Include="Pop Ups\Discount.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Discount.Designer.cs">
+    <Compile Include="Pop Ups\Discount.Designer.cs">
       <DependentUpon>Discount.cs</DependentUpon>
     </Compile>
     <Compile Include="employee_dbconnection.cs" />
-    <Compile Include="LoyaltyForm.cs">
+    <Compile Include="Pop Ups\LoyaltyForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LoyaltyForm.Designer.cs">
+    <Compile Include="Pop Ups\LoyaltyForm.Designer.cs">
       <DependentUpon>LoyaltyForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Payment.cs">
+    <Compile Include="Pop Ups\Payment.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Payment.Designer.cs">
+    <Compile Include="Pop Ups\Payment.Designer.cs">
       <DependentUpon>Payment.cs</DependentUpon>
     </Compile>
     <Compile Include="products_reports.cs">
@@ -89,22 +89,22 @@
     <Compile Include="ProductDatabase.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Quantity.cs">
+    <Compile Include="Pop Ups\Quantity.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Quantity.Designer.cs">
+    <Compile Include="Pop Ups\Quantity.Designer.cs">
       <DependentUpon>Quantity.cs</DependentUpon>
     </Compile>
-    <Compile Include="Receipt.cs">
+    <Compile Include="Pop Ups\Receipt.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Receipt.Designer.cs">
+    <Compile Include="Pop Ups\Receipt.Designer.cs">
       <DependentUpon>Receipt.cs</DependentUpon>
     </Compile>
-    <Compile Include="Refund.cs">
+    <Compile Include="Pop Ups\Refund.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Refund.Designer.cs">
+    <Compile Include="Pop Ups\Refund.Designer.cs">
       <DependentUpon>Refund.cs</DependentUpon>
     </Compile>
     <Compile Include="Save_Product.cs">
@@ -119,13 +119,13 @@
     <EmbeddedResource Include="Cashier.resx">
       <DependentUpon>Cashier.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Discount.resx">
+    <EmbeddedResource Include="Pop Ups\Discount.resx">
       <DependentUpon>Discount.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LoyaltyForm.resx">
+    <EmbeddedResource Include="Pop Ups\LoyaltyForm.resx">
       <DependentUpon>LoyaltyForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Payment.resx">
+    <EmbeddedResource Include="Pop Ups\Payment.resx">
       <DependentUpon>Payment.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="products_reports.resx">
@@ -141,19 +141,18 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Quantity.resx">
+    <EmbeddedResource Include="Pop Ups\Quantity.resx">
       <DependentUpon>Quantity.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Receipt.resx">
+    <EmbeddedResource Include="Pop Ups\Receipt.resx">
       <DependentUpon>Receipt.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Refund.resx">
+    <EmbeddedResource Include="Pop Ups\Refund.resx">
       <DependentUpon>Refund.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Save_Product.resx">
       <DependentUpon>Save_Product.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -163,9 +162,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\no photo1.png" />
