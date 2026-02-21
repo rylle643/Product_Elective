@@ -69,5 +69,15 @@ namespace Product_Elective.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap White_Modern_Minimalist_Signature_Brand_Logo {
+            get {
+                object obj = ResourceManager.GetObject("White Modern Minimalist Signature Brand Logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

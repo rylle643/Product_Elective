@@ -61,6 +61,12 @@
     <Compile Include="Cashier.Designer.cs">
       <DependentUpon>Cashier.cs</DependentUpon>
     </Compile>
+    <Compile Include="Full.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Full.Designer.cs">
+      <DependentUpon>Full.cs</DependentUpon>
+    </Compile>
     <Compile Include="Pop Ups\Discount.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -119,6 +125,9 @@
     <EmbeddedResource Include="Cashier.resx">
       <DependentUpon>Cashier.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Full.resx">
+      <DependentUpon>Full.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Pop Ups\Discount.resx">
       <DependentUpon>Discount.cs</DependentUpon>
     </EmbeddedResource>
@@ -168,6 +177,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\no photo2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\White Modern Minimalist Signature Brand Logo.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

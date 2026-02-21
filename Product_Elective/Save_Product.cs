@@ -48,6 +48,7 @@ namespace Product_Elective
 
         private void POS_Admin_Load(object sender, EventArgs e)
         {
+            
             try
             {
                 picpathTxtbox1.Hide();
@@ -81,13 +82,12 @@ namespace Product_Elective
         // Fires every time user types in the barcode textbox
         private void Barcode_textBox_TextChanged(object sender, EventArgs e)
         {
-            // Restart timer each keystroke — only search after user pauses typing
             searchTimer.Stop();
 
             if (Barcode_textBox.Text.Length >= 3)
                 searchTimer.Start();
             else
-                cleartextboxes(); // Clear form if barcode is too short
+                ClearFieldsOnly();
         }
 
         // Fires after the delay — does the actual search

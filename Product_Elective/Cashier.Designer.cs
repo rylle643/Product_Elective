@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             this.panel2 = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.priceTxtbox1 = new System.Windows.Forms.TextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.button13 = new System.Windows.Forms.Button();
@@ -44,7 +47,6 @@
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
-            this.priceTxtbox1 = new System.Windows.Forms.TextBox();
             this.button14 = new System.Windows.Forms.Button();
             this.SearchtextBox = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
@@ -54,12 +56,10 @@
             this.time_dateLabel = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.OrderGridView = new System.Windows.Forms.DataGridView();
-            this.label2 = new System.Windows.Forms.Label();
-            this.panel3 = new System.Windows.Forms.Panel();
             this.panel2.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.OrderGridView)).BeginInit();
-            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel2
@@ -85,6 +85,41 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(489, 1025);
             this.panel2.TabIndex = 1;
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.PaleVioletRed;
+            this.panel3.Controls.Add(this.label2);
+            this.panel3.Controls.Add(this.priceTxtbox1);
+            this.panel3.Location = new System.Drawing.Point(0, -6);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(504, 143);
+            this.panel3.TabIndex = 245;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.BackColor = System.Drawing.Color.PaleVioletRed;
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.label2.Location = new System.Drawing.Point(10, 13);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(131, 21);
+            this.label2.TabIndex = 244;
+            this.label2.Text = "Total Due (PHP)";
+            // 
+            // priceTxtbox1
+            // 
+            this.priceTxtbox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.priceTxtbox1.BackColor = System.Drawing.Color.PaleVioletRed;
+            this.priceTxtbox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.priceTxtbox1.Font = new System.Drawing.Font("Segoe UI Black", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.priceTxtbox1.ForeColor = System.Drawing.Color.White;
+            this.priceTxtbox1.Location = new System.Drawing.Point(-5, 36);
+            this.priceTxtbox1.Multiline = true;
+            this.priceTxtbox1.Name = "priceTxtbox1";
+            this.priceTxtbox1.Size = new System.Drawing.Size(509, 115);
+            this.priceTxtbox1.TabIndex = 228;
             // 
             // textBox1
             // 
@@ -298,19 +333,6 @@
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // priceTxtbox1
-            // 
-            this.priceTxtbox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.priceTxtbox1.BackColor = System.Drawing.Color.PaleVioletRed;
-            this.priceTxtbox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.priceTxtbox1.Font = new System.Drawing.Font("Segoe UI Black", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.priceTxtbox1.ForeColor = System.Drawing.Color.White;
-            this.priceTxtbox1.Location = new System.Drawing.Point(-5, 36);
-            this.priceTxtbox1.Multiline = true;
-            this.priceTxtbox1.Name = "priceTxtbox1";
-            this.priceTxtbox1.Size = new System.Drawing.Size(509, 115);
-            this.priceTxtbox1.TabIndex = 228;
-            // 
             // button14
             // 
             this.button14.BackColor = System.Drawing.Color.PaleVioletRed;
@@ -377,9 +399,9 @@
             // 
             this.emp_surnameLabel.Font = new System.Drawing.Font("Segoe UI Black", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.emp_surnameLabel.ForeColor = System.Drawing.Color.White;
-            this.emp_surnameLabel.Location = new System.Drawing.Point(1670, 12);
+            this.emp_surnameLabel.Location = new System.Drawing.Point(1664, 12);
             this.emp_surnameLabel.Name = "emp_surnameLabel";
-            this.emp_surnameLabel.Size = new System.Drawing.Size(142, 30);
+            this.emp_surnameLabel.Size = new System.Drawing.Size(228, 30);
             this.emp_surnameLabel.TabIndex = 53;
             this.emp_surnameLabel.Text = "LABEL";
             this.emp_surnameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -421,28 +443,6 @@
             this.OrderGridView.TabIndex = 244;
             this.OrderGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.OrderGridView_CellContentClick);
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.BackColor = System.Drawing.Color.PaleVioletRed;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.label2.Location = new System.Drawing.Point(10, 13);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(131, 21);
-            this.label2.TabIndex = 244;
-            this.label2.Text = "Total Due (PHP)";
-            // 
-            // panel3
-            // 
-            this.panel3.BackColor = System.Drawing.Color.PaleVioletRed;
-            this.panel3.Controls.Add(this.label2);
-            this.panel3.Controls.Add(this.priceTxtbox1);
-            this.panel3.Location = new System.Drawing.Point(0, -6);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(504, 143);
-            this.panel3.TabIndex = 245;
-            // 
             // Cashier
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -459,11 +459,11 @@
             this.Load += new System.EventHandler(this.Cashier_Load);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.panel3.ResumeLayout(false);
+            this.panel3.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.OrderGridView)).EndInit();
-            this.panel3.ResumeLayout(false);
-            this.panel3.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
