@@ -21,7 +21,7 @@ namespace Product_Elective
         public void product_connString()
         {
             product_sql_connection = new SqlConnection();
-            product_connectionString = "Data Source=192.168.1.9,1433;Initial Catalog=Products;User ID=Rylle_PC;Password=0000;";
+            product_connectionString = "Data Source=192.168.1.10,1433;Initial Catalog=Products;User ID=Rylle_PC;Password=0000;";
             product_sql_connection = new SqlConnection(product_connectionString);
             product_sql_connection.ConnectionString = product_connectionString;
             product_sql_connection.Open();

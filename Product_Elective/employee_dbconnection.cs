@@ -18,7 +18,7 @@ namespace Product_Elective
             try
             {
                 employee_conn = new SqlConnection(
-                    "Data Source=192.168.1.9,1433;Initial Catalog=Products;User ID=Rylle_PC;Password=0000;"
+                    "Data Source=192.168.1.10,1433;Initial Catalog=Products;User ID=Rylle_PC;Password=0000;"
                 );
                 employee_conn.Open();
             }
