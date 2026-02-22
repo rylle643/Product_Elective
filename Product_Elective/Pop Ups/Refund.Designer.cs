@@ -56,7 +56,7 @@
             this.panel1.Controls.Add(this.button1);
             this.panel1.Controls.Add(this.salesIdTextBox);
             this.panel1.Controls.Add(this.label3);
-            this.panel1.Location = new System.Drawing.Point(28, 112);
+            this.panel1.Location = new System.Drawing.Point(28, 85);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(970, 100);
             this.panel1.TabIndex = 0;
@@ -279,7 +279,7 @@
             // 
             this.panel6.BackColor = System.Drawing.Color.White;
             this.panel6.Controls.Add(this.statusLabel);
-            this.panel6.Location = new System.Drawing.Point(28, 218);
+            this.panel6.Location = new System.Drawing.Point(28, 203);
             this.panel6.Name = "panel6";
             this.panel6.Size = new System.Drawing.Size(970, 55);
             this.panel6.TabIndex = 30;
@@ -307,7 +307,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.LavenderBlush;
+            this.BackColor = System.Drawing.Color.Pink;
             this.ClientSize = new System.Drawing.Size(1030, 704);
             this.Controls.Add(this.panel7);
             this.Controls.Add(this.panel6);
