@@ -18,6 +18,7 @@ namespace Product_Elective
         private decimal lastChange = 0;         // how much change to give back
         private string lastDiscountType = "";   // senior, pwd, etc.
         private decimal lastDiscountRate = 0;   // 0.20 = 20% discount
+        private string pendingLoyaltyCustomer = "";
 
         // ─────────────────────────────────────────────────────────────────────────
         // FORM SETUP
@@ -703,6 +704,7 @@ namespace Product_Elective
         {
             try
             {
+                // --- Original validation checks ---
                 if (OrderGridView.Rows.Count == 0)
                 {
                     MessageBox.Show("No items to save!");
@@ -715,9 +717,11 @@ namespace Product_Elective
                     return;
                 }
 
+                // --- Define date and time once for consistent timestamps ---
                 string dateToSave = DateTime.Now.ToString("M/d/yyyy");
                 string timeToSave = DateTime.Now.ToString("hh:mm tt");
 
+                // --- Save each order item to salesTbl (original logic) ---
                 foreach (DataGridViewRow row in OrderGridView.Rows)
                 {
                     string productId = row.Cells["colBarcode"].Value?.ToString();
@@ -729,7 +733,40 @@ namespace Product_Elective
                     productdb_connect.product_sqladapterInsert();
                 }
 
-                // Deduct stock NOW — only after the sale is saved to the database
+                // --- New: Silent loyalty points update ---
+                if (!string.IsNullOrWhiteSpace(pendingLoyaltyCustomer))
+                {
+                    int points = OrderGridView.Rows.Count; // points = number of items bought
+                    string cashierId = cashier_comboBox.SelectedItem.ToString();
+
+                    // Check if customer already exists
+                    productdb_connect.product_sql = "SELECT COUNT(*) FROM loyaltyTbl WHERE customer_name = '" + pendingLoyaltyCustomer + "'";
+                    productdb_connect.product_cmd();
+                    int exists = Convert.ToInt32(productdb_connect.product_sql_command.ExecuteScalar());
+
+                    if (exists > 0)
+                    {
+                        // Update existing customer
+                        productdb_connect.product_sql = "UPDATE loyaltyTbl SET points = points + " + points +
+                                                        ", cashier_id = '" + cashierId + "'" +
+                                                        ", time_date = '" + dateToSave + " " + timeToSave + "'" +
+                                                        " WHERE customer_name = '" + pendingLoyaltyCustomer + "'";
+                        productdb_connect.product_cmd();
+                        productdb_connect.product_sqladapterUpdate();
+                    }
+                    else
+                    {
+                        // Insert new customer
+                        productdb_connect.product_sql = "INSERT INTO loyaltyTbl (customer_name, points, cashier_id, time_date) " +
+                                                        "VALUES ('" + pendingLoyaltyCustomer + "', " + points + ", '" + cashierId + "', '" + dateToSave + " " + timeToSave + "')";
+                        productdb_connect.product_cmd();
+                        productdb_connect.product_sqladapterInsert();
+                    }
+
+                    pendingLoyaltyCustomer = ""; // reset after use
+                }
+
+                // --- Deduct stock after sale is fully recorded ---
                 DeductStockFromDatabase();
 
                 MessageBox.Show("Sale saved successfully!");
@@ -744,39 +781,36 @@ namespace Product_Elective
         // Add loyalty points
         private void button7_Click(object sender, EventArgs e)
         {
-            try
+            if (OrderGridView.Rows.Count == 0)
             {
-                if (OrderGridView.Rows.Count == 0)
-                {
-                    MessageBox.Show("No items in the order!");
-                    return;
-                }
-
-                if (cashier_comboBox.SelectedIndex <= 0)
-                {
-                    MessageBox.Show("Please select a cashier first!");
-                    return;
-                }
-
-                LoyaltyForm loyaltyForm = new LoyaltyForm();
-                if (loyaltyForm.ShowDialog() != DialogResult.OK)
-                    return;
-
-                string customerName = loyaltyForm.CustomerName;
-                int points = OrderGridView.Rows.Count;
-                string dateToSave = DateTime.Now.ToString("M/d/yyyy");
-                string timeToSave = DateTime.Now.ToString("hh:mm tt");
-
-                productdb_connect.product_sql = "INSERT INTO loyaltyTbl (customer_name, points, cashier_id, time_date) VALUES ('" + customerName + "', '" + points + "', '" + cashier_comboBox.SelectedItem.ToString() + "', '" + dateToSave + " " + timeToSave + "')";
-                productdb_connect.product_cmd();
-                productdb_connect.product_sqladapterInsert();
-
-                MessageBox.Show("Added " + points + " point(s) for " + customerName + "!");
+                MessageBox.Show("No items in the order!");
+                return;
             }
-            catch (Exception)
+
+            if (cashier_comboBox.SelectedIndex <= 0)
             {
-                MessageBox.Show("Error occurs in this area. Please contact your administrator for this matter!!!");
+                MessageBox.Show("Please select a cashier first!");
+                return;
             }
+
+            LoyaltyForm loyaltyForm = new LoyaltyForm();
+            if (loyaltyForm.ShowDialog() != DialogResult.OK)
+                return;
+
+            string customerName = loyaltyForm.CustomerName.Trim();
+
+            // Check if customer exists — show message here
+            productdb_connect.product_sql = "SELECT COUNT(*) FROM loyaltyTbl WHERE customer_name = '" + customerName + "'";
+            productdb_connect.product_cmd();
+            int exists = Convert.ToInt32(productdb_connect.product_sql_command.ExecuteScalar());
+
+            if (exists > 0)
+                MessageBox.Show("Welcome back, " + customerName + "! +1 point will be added.", "Existing Customer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            else
+                MessageBox.Show(customerName + " is a new customer! +1 point will be added.", "New Customer", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            // Just remember the name — don't save yet
+            pendingLoyaltyCustomer = customerName;
         }
 
         // Open refund form
