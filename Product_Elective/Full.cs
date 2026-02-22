@@ -141,5 +141,10 @@ namespace Product_Elective
                 child.Close();
             }
         }
+
+        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
     }
 }
