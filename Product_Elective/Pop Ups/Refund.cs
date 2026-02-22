@@ -143,6 +143,15 @@ namespace Product_Elective
                 DiscountLabel.Text = discountType;
                 TotalRefundLabel.Text = "P" + grandTotal.ToString("#,##0.00");
 
+                // Check if already refunded
+                if (discountType.StartsWith("REFUNDED"))
+                {
+                    statusLabel.Text = "This sale has already been refunded!";
+                    statusLabel.ForeColor = Color.FromArgb(160, 50, 50);
+                    confirmButton.Enabled = false; // ← block the confirm button
+                    return;
+                }
+
                 statusLabel.Text = "Sale found - " + dt.Rows.Count + " item(s). Click CONFIRM REFUND to proceed.";
                 statusLabel.ForeColor = Color.FromArgb(30, 120, 50);
                 confirmButton.Enabled = true;
