@@ -16,6 +16,7 @@ namespace Product_Elective
         public Full()
         {
             InitializeComponent();
+            this.WindowState = FormWindowState.Maximized;
         }
 
         private void Full_Load(object sender, EventArgs e)
