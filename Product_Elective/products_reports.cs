@@ -70,7 +70,6 @@ namespace Product_Elective
         {
             foreach (DataGridViewColumn col in dataGridView1.Columns)
             {
-                // Set all columns to MiddleLeft by default
                 col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
 
                 switch (col.Name)
@@ -90,7 +89,6 @@ namespace Product_Elective
                 }
             }
 
-            // All text columns — explicitly MiddleLeft (overrides anything inherited)
             string[] leftAlignCols = { "product_name", "description", "brand", "category", "unit", "productid", "date_added", "date_expiration" };
             foreach (string colName in leftAlignCols)
                 if (dataGridView1.Columns.Contains(colName))
@@ -135,7 +133,6 @@ namespace Product_Elective
             optionInputTxtbox.Focus();
         }
 
-        // ── Hover ────────────────────────────────────────────────────────────────
         private void dataGridView1_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)

@@ -21,7 +21,6 @@ namespace Product_Elective
         private Image pic;
         OpenFileDialog OpenFileDialog1 = new OpenFileDialog();
 
-        // Timer for auto-search delay (so it doesn't search every single keypress)
         private Timer searchTimer = new Timer();
 
         private string GetCleanPrice()
@@ -41,7 +40,6 @@ namespace Product_Elective
             InitializeComponent();
             this.WindowState = FormWindowState.Maximized;
 
-            // Setup auto-search timer (waits 600ms after user stops typing)
             searchTimer.Interval = 100;
             searchTimer.Tick += SearchTimer_Tick;
         }
@@ -77,9 +75,6 @@ namespace Product_Elective
             }
         }
 
-        // ── AUTO SEARCH LOGIC ────────────────────────────────────────────
-
-        // Fires every time user types in the barcode textbox
         private void Barcode_textBox_TextChanged(object sender, EventArgs e)
         {
             searchTimer.Stop();
@@ -90,25 +85,22 @@ namespace Product_Elective
                 ClearFieldsOnly();
         }
 
-        // Fires after the delay — does the actual search
         private void SearchTimer_Tick(object sender, EventArgs e)
         {
             searchTimer.Stop();
-            SearchProduct(showWarning: false); // Silent search, no popups
+            SearchProduct(showWarning: false); 
         }
 
-        // Allow pressing Enter to search manually
         private void Barcode_textBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
             {
                 searchTimer.Stop();
-                SearchProduct(showWarning: true); // Manual search shows "not found" message
+                SearchProduct(showWarning: true); 
                 e.SuppressKeyPress = true;
             }
         }
 
-        // ── SHARED SEARCH METHOD ─────────────────────────────────────────
 
         private void SearchProduct(bool showWarning)
         {
@@ -124,7 +116,6 @@ namespace Product_Elective
 
                 if (productdb_connect.product_sql_dataset.Tables[0].Rows.Count > 0)
                 {
-                    // Product found — fill in all fields
                     nameTxtbox1.Text = productdb_connect.product_sql_dataset.Tables[0].Rows[0]["product_name"].ToString();
                     quantityTxtbox1.Text = productdb_connect.product_sql_dataset.Tables[0].Rows[0]["quantity"].ToString();
                     unitTxtbox1.Text = productdb_connect.product_sql_dataset.Tables[0].Rows[0]["unit"].ToString();
@@ -164,36 +155,33 @@ namespace Product_Elective
                     }
                     catch { pictureBox2.Image = Resources.no_photo; }
 
-                    // Check stock level and show info (no popup, just color)
                     int qty = 0;
                     int.TryParse(quantityTxtbox1.Text, out qty);
 
                     if (qty == 0)
-                        quantityTxtbox1.ForeColor = Color.Red;    // Out of stock
+                        quantityTxtbox1.ForeColor = Color.Red;  
                     else if (qty < 5)
-                        quantityTxtbox1.ForeColor = Color.Brown;  // Low stock
+                        quantityTxtbox1.ForeColor = Color.Brown;  
                     else
-                        quantityTxtbox1.ForeColor = Color.Green;  // Good stock
+                        quantityTxtbox1.ForeColor = Color.Green; 
                 }
                 else
                 {
-                    // Product not found
+                    
                     if (showWarning)
                     {
-                        // Only show message if user manually searched (pressed Enter or Search button)
-                        MessageBox.Show("Product not found! You can add it as a new product.", "Not Found", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        
+                        MessageBox.Show("Product not found! You can add it as a new product.");
                     }
-                    // If auto-search, just silently clear — no popup
-                    ClearFieldsOnly(); // Clear fields but keep barcode text
+                    ClearFieldsOnly(); 
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error searching product: " + ex.Message);
+                MessageBox.Show("Error searching product: ");
             }
         }
 
-        // Clears all fields EXCEPT the barcode textbox
         private void ClearFieldsOnly()
         {
             try
@@ -219,7 +207,6 @@ namespace Product_Elective
             }
         }
 
-        // ── EXISTING METHODS (updated to use Barcode_textBox) ────────────
 
         private void priceTxtbox1_TextChanged(object sender, EventArgs e)
         {
@@ -263,7 +250,7 @@ namespace Product_Elective
             try
             {
                 pic = Resources.no_photo;
-                Barcode_textBox.Text = "";  // ← updated
+                Barcode_textBox.Text = ""; 
                 picpathTxtbox1.Clear();
                 barcodeTxtbox1.Clear();
                 pictureBox1.Image = pic;
@@ -294,12 +281,11 @@ namespace Product_Elective
             cleartextboxes();
         }
 
-        // SAVE button
         private void button2_Click(object sender, EventArgs e)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(Barcode_textBox.Text))  // ← updated
+                if (string.IsNullOrWhiteSpace(Barcode_textBox.Text)) 
                 {
                     MessageBox.Show("Please enter a barcode/product ID!");
                     return;
@@ -316,7 +302,7 @@ namespace Product_Elective
                 productdb_connect.product_sql = "INSERT INTO productTbl " +
                                                 "(product_name, productid, quantity, price, unit, description, product_pic_path, barcode_pic_path, brand, category, date_added, date_expiration) " +
                                                 "VALUES ('" + nameTxtbox1.Text + "', " +
-                                                "'" + Barcode_textBox.Text + "', " +  // ← updated
+                                                "'" + Barcode_textBox.Text + "', " +  
                                                 (string.IsNullOrWhiteSpace(quantityTxtbox1.Text) ? "0" : quantityTxtbox1.Text) + ", " +
                                                 (string.IsNullOrWhiteSpace(cleanPrice) ? "0" : cleanPrice) + ", " +
                                                 "'" + unitTxtbox1.Text + "', " +
@@ -339,19 +325,17 @@ namespace Product_Elective
             }
         }
 
-        // SEARCH button (manual)
         private void button1_Click(object sender, EventArgs e)
         {
             searchTimer.Stop();
-            SearchProduct(showWarning: true); // Manual = show "not found" message
+            SearchProduct(showWarning: true); 
         }
 
-        // UPDATE button
         private void button4_Click(object sender, EventArgs e)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(Barcode_textBox.Text))  // ← updated
+                if (string.IsNullOrWhiteSpace(Barcode_textBox.Text))  
                 {
                     MessageBox.Show("Please enter a barcode!");
                     return;
@@ -371,7 +355,7 @@ namespace Product_Elective
                                                 "category = '" + comboBoxCategory.Text + "', " +
                                                 "date_added = '" + dateAddedPicker.Value.ToString("yyyy-MM-dd") + "', " +
                                                 "date_expiration = '" + dateExpirationPicker.Value.ToString("yyyy-MM-dd") + "' " +
-                                                "WHERE productid = '" + Barcode_textBox.Text + "'";  // ← updated
+                                                "WHERE productid = '" + Barcode_textBox.Text + "'";  
                 productdb_connect.product_cmd();
                 productdb_connect.product_sqladapterUpdate();
 
@@ -383,12 +367,11 @@ namespace Product_Elective
             }
         }
 
-        // DELETE button
         private void button3_Click(object sender, EventArgs e)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(Barcode_textBox.Text))  // ← updated
+                if (string.IsNullOrWhiteSpace(Barcode_textBox.Text))  
                 {
                     MessageBox.Show("Please enter a barcode to delete!");
                     return;
@@ -403,7 +386,7 @@ namespace Product_Elective
 
                 if (result == DialogResult.Yes)
                 {
-                    productdb_connect.product_sql = "DELETE FROM productTbl WHERE productid = '" + Barcode_textBox.Text + "'";  // ← updated
+                    productdb_connect.product_sql = "DELETE FROM productTbl WHERE productid = '" + Barcode_textBox.Text + "'"; 
                     productdb_connect.product_cmd();
                     productdb_connect.product_sqladapterDelete();
 
@@ -463,11 +446,11 @@ namespace Product_Elective
             int.TryParse(quantityTxtbox1.Text, out qty);
 
             if (qty == 0)
-                quantityTxtbox1.ForeColor = Color.Red;    // Out of stock
+                quantityTxtbox1.ForeColor = Color.Red;  
             else if (qty < 5)
-                quantityTxtbox1.ForeColor = Color.Brown;  // Low stock
+                quantityTxtbox1.ForeColor = Color.Brown; 
             else
-                quantityTxtbox1.ForeColor = Color.Green;  // Good stock
+                quantityTxtbox1.ForeColor = Color.Green;  
         }
 
         private void panel5_Paint(object sender, PaintEventArgs e)
