@@ -170,7 +170,7 @@
             this.button10.TabIndex = 240;
             this.button10.Text = "LOGOUT";
             this.button10.UseVisualStyleBackColor = false;
-            this.button10.Click += new System.EventHandler(this.button10_Click);
+            this.button10.Click += new System.EventHandler(this.button10_Click_1);
             // 
             // button11
             // 
@@ -273,7 +273,7 @@
             this.button5.TabIndex = 233;
             this.button5.Text = "VOID ORDER";
             this.button5.UseVisualStyleBackColor = false;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.button5.Click += new System.EventHandler(this.button5_Click_1);
             // 
             // button6
             // 
@@ -303,7 +303,7 @@
             this.button3.TabIndex = 231;
             this.button3.Text = "NEW";
             this.button3.UseVisualStyleBackColor = false;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.button3.Click += new System.EventHandler(this.button3_Click_1);
             // 
             // button2
             // 
@@ -369,7 +369,6 @@
             this.label9.Size = new System.Drawing.Size(142, 25);
             this.label9.TabIndex = 248;
             this.label9.Text = "EMPLOYEE ID:";
-            this.label9.Click += new System.EventHandler(this.label9_Click);
             // 
             // cashier_comboBox
             // 
@@ -393,7 +392,6 @@
             this.emp_fnameLabel.TabIndex = 52;
             this.emp_fnameLabel.Text = "LABEL";
             this.emp_fnameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.emp_fnameLabel.Click += new System.EventHandler(this.emp_fnameLabel_Click);
             // 
             // emp_surnameLabel
             // 
@@ -405,7 +403,6 @@
             this.emp_surnameLabel.TabIndex = 53;
             this.emp_surnameLabel.Text = "LABEL";
             this.emp_surnameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.emp_surnameLabel.Click += new System.EventHandler(this.emp_surnameLabel_Click);
             // 
             // time_dateLabel
             // 
@@ -441,7 +438,6 @@
             this.OrderGridView.Name = "OrderGridView";
             this.OrderGridView.Size = new System.Drawing.Size(1371, 821);
             this.OrderGridView.TabIndex = 244;
-            this.OrderGridView.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.OrderGridView_CellContentClick);
             // 
             // Cashier
             // 

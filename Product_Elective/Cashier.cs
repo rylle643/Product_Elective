@@ -7,23 +7,18 @@ namespace Product_Elective
 {
     public partial class Cashier : Form
     {
-        // ── Database connections ──────────────────────────────────────────────────
         ProductDatabase productdb_connect = new ProductDatabase();
         employee_dbconnection empdb_connect = new employee_dbconnection();
 
-        // ── Variables to remember important info during a transaction ─────────────
-        private int selectedQuantity = 1;       // how many items the cashier wants to add
-        private string lastPaymentType = "";    // cash, card, etc.
-        private decimal lastAmountPaid = 0;     // how much the customer gave
-        private decimal lastChange = 0;         // how much change to give back
-        private string lastDiscountType = "";   // senior, pwd, etc.
-        private decimal lastDiscountRate = 0;   // 0.20 = 20% discount
+        private int selectedQuantity = 1;       
+        private string lastPaymentType = "";   
+        private decimal lastAmountPaid = 0;    
+        private decimal lastChange = 0;        
+        private string lastDiscountType = "";  
+        private decimal lastDiscountRate = 0;  
         private string pendingLoyaltyCustomer = "";
 
-        // ─────────────────────────────────────────────────────────────────────────
-        // FORM SETUP
-        // ─────────────────────────────────────────────────────────────────────────
-
+   
         public Cashier()
         {
             productdb_connect.product_connString();
@@ -38,10 +33,8 @@ namespace Product_Elective
             SetupOrderGrid();
             LoadEmployees();
 
-            // Hook up auto-search so typing in the box triggers a product lookup
             SearchtextBox.TextChanged += SearchtextBox_TextChanged;
 
-            // Show placeholder text in the search box
             SearchtextBox.Text = "READY TO SCAN...";
             SearchtextBox.ForeColor = Color.Gray;
             SearchtextBox.GotFocus += SearchtextBox_GotFocus;
@@ -50,7 +43,7 @@ namespace Product_Elective
             SearchtextBox.Focus();
         }
 
-        // Sets up the look and columns of the order table
+    
         private void SetupOrderGrid()
         {
             OrderGridView.Columns.Clear();
@@ -70,14 +63,12 @@ namespace Product_Elective
             OrderGridView.GridColor = Color.FromArgb(200, 180, 190);
             OrderGridView.BorderStyle = BorderStyle.None;
 
-            // Header row style
             OrderGridView.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(160, 50, 90);
             OrderGridView.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
             OrderGridView.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI Semibold", 15F, FontStyle.Bold);
             OrderGridView.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             OrderGridView.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(160, 50, 90);
 
-            // Normal row style
             OrderGridView.DefaultCellStyle.BackColor = Color.White;
             OrderGridView.DefaultCellStyle.ForeColor = Color.FromArgb(30, 10, 20);
             OrderGridView.DefaultCellStyle.Font = new Font("Segoe UI", 14F);
@@ -85,14 +76,12 @@ namespace Product_Elective
             OrderGridView.DefaultCellStyle.SelectionForeColor = Color.White;
             OrderGridView.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-            // Alternating row style
             OrderGridView.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 240, 242);
             OrderGridView.AlternatingRowsDefaultCellStyle.ForeColor = Color.FromArgb(30, 10, 20);
             OrderGridView.AlternatingRowsDefaultCellStyle.SelectionBackColor = Color.FromArgb(180, 70, 110);
             OrderGridView.AlternatingRowsDefaultCellStyle.SelectionForeColor = Color.White;
             OrderGridView.AlternatingRowsDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-            // Add columns
             OrderGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "colBarcode", HeaderText = "Barcode", Width = 200 });
             OrderGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "colName", HeaderText = "Product Name", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
             OrderGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "colPrice", HeaderText = "Price (₱)", Width = 150 });
@@ -102,10 +91,6 @@ namespace Product_Elective
             OrderGridView.Columns["colPrice"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
             OrderGridView.Columns["colTotal"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
         }
-
-        // ─────────────────────────────────────────────────────────────────────────
-        // SEARCH BOX PLACEHOLDER BEHAVIOR
-        // ─────────────────────────────────────────────────────────────────────────
 
         private void SearchtextBox_GotFocus(object sender, EventArgs e)
         {
@@ -129,7 +114,6 @@ namespace Product_Elective
             }
         }
 
-        // Resets the search box back to placeholder state
         private void ResetSearchBox()
         {
             SearchtextBox.TextChanged -= SearchtextBox_TextChanged;
@@ -137,16 +121,12 @@ namespace Product_Elective
             SearchtextBox.ForeColor = Color.FromArgb(30, 10, 20);
             SearchtextBox.TextChanged += SearchtextBox_TextChanged;
 
-            // Use BeginInvoke so focus happens AFTER the current event finishes
             this.BeginInvoke(new Action(() =>
             {
                 SearchtextBox.Focus();
             }));
         }
 
-        // ─────────────────────────────────────────────────────────────────────────
-        // AUTO-SEARCH (silent — fires on every keystroke)
-        // ─────────────────────────────────────────────────────────────────────────
 
         private void SearchtextBox_TextChanged(object sender, EventArgs e)
         {
@@ -213,13 +193,8 @@ namespace Product_Elective
             }
             catch
             {
-                // Silent — don't interrupt scanning
             }
         }
-
-        // ─────────────────────────────────────────────────────────────────────────
-        // SEARCH BUTTON (shows warnings when something is wrong)
-        // ─────────────────────────────────────────────────────────────────────────
 
         private void button14_Click(object sender, EventArgs e)
         {
@@ -243,7 +218,7 @@ namespace Product_Elective
 
                 if (table == null || table.Rows.Count == 0)
                 {
-                    MessageBox.Show("Product not found! Please check the barcode and try again.", "Not Found", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Product not found! Please check the barcode and try again.", "Not Found");
                     ResetSearchBox();
                     return;
                 }
@@ -256,14 +231,14 @@ namespace Product_Elective
 
                 if (stockQty == 0)
                 {
-                    MessageBox.Show($"'{name}' is out of stock!", "Out of Stock", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show($"'{name}' is out of stock!", "Out of Stock");
                     ResetSearchBox();
                     return;
                 }
 
                 if (stockQty < selectedQuantity)
                 {
-                    MessageBox.Show($"Not enough stock for '{name}'!\nAvailable: {stockQty}", "Insufficient Stock", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show($"Not enough stock for '{name}'!\nAvailable: {stockQty}", "Insufficient Stock");
                     ResetSearchBox();
                     return;
                 }
@@ -277,7 +252,7 @@ namespace Product_Elective
 
                         if (newQty > stockQty)
                         {
-                            MessageBox.Show($"Cannot add more '{name}'.\nMax available: {stockQty}", "Insufficient Stock", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            MessageBox.Show($"Cannot add more '{name}'.\nMax available: {stockQty}", "Insufficient Stock");
                             alreadyInGrid = true;
                             break;
                         }
@@ -310,9 +285,6 @@ namespace Product_Elective
             }
         }
 
-        // ─────────────────────────────────────────────────────────────────────────
-        // EMPLOYEE / CASHIER LOADING
-        // ─────────────────────────────────────────────────────────────────────────
 
         private void LoadEmployees()
         {
@@ -377,10 +349,6 @@ namespace Product_Elective
             }
         }
 
-        // ─────────────────────────────────────────────────────────────────────────
-        // ORDER HELPERS
-        // ─────────────────────────────────────────────────────────────────────────
-
         private void UpdateTotalPrice()
         {
             decimal grandTotal = 0;
@@ -417,7 +385,6 @@ namespace Product_Elective
             ResetSearchBox();
         }
 
-        // Stock is deducted here — only when the sale is saved, not when payment is made
         private void DeductStockFromDatabase()
         {
             try
@@ -441,9 +408,6 @@ namespace Product_Elective
             }
         }
 
-        // ─────────────────────────────────────────────────────────────────────────
-        // RECEIPT — clean centered layout, no messy box table for items
-        // ─────────────────────────────────────────────────────────────────────────
 
         private void OpenReceipt(string paymentType, decimal amountPaid, decimal change)
         {
@@ -452,7 +416,6 @@ namespace Product_Elective
                 Product_Elective.Receipt print = new Product_Elective.Receipt();
                 print.printDisplayListbox.Items.Clear();
 
-                // Calculate subtotal (before discount) and discounted total
                 decimal originalTotal = 0;
                 decimal discountedTotal = 0;
 
@@ -472,26 +435,20 @@ namespace Product_Elective
                 decimal discountAmount = originalTotal - discountedTotal;
                 string discountLabel = lastDiscountType + (lastDiscountRate > 0 ? " (" + (lastDiscountRate * 100) + "%)" : "");
 
-                // Width of the receipt content area (inside the box borders)
-                // ╔══════════════════════════════════════╗  = 40 = signs inside
-                // So usable content width = 38 characters
                 int W = 38;
 
-                // ── HEADER ───────────────────────────────────────────────────────
                 print.printDisplayListbox.Items.Add("  ╔══════════════════════════════════════╗");
                 print.printDisplayListbox.Items.Add("  ║" + Center("PRODUCT ELECTIVE", W) + "║");
                 print.printDisplayListbox.Items.Add("  ║" + Center("SALES RECEIPT", W) + "║");
                 print.printDisplayListbox.Items.Add("  ╚══════════════════════════════════════╝");
                 print.printDisplayListbox.Items.Add("");
 
-                // ── TRANSACTION INFO ──────────────────────────────────────────────
                 print.printDisplayListbox.Items.Add("  Date    : " + DateTime.Now.ToString("MMMM dd, yyyy"));
                 print.printDisplayListbox.Items.Add("  Time    : " + DateTime.Now.ToString("hh:mm tt"));
                 print.printDisplayListbox.Items.Add("  Cashier : " + emp_fnameLabel.Text + " " + emp_surnameLabel.Text);
                 print.printDisplayListbox.Items.Add("  ID      : " + cashier_comboBox.SelectedItem.ToString());
                 print.printDisplayListbox.Items.Add("");
 
-                // ── ITEMS — simple clean list, left name right total ──────────────
                 print.printDisplayListbox.Items.Add("  " + new string('-', W + 2));
                 print.printDisplayListbox.Items.Add("  " + PadRow("ITEM", "QTY", "TOTAL", W));
                 print.printDisplayListbox.Items.Add("  " + new string('-', W + 2));
@@ -502,7 +459,6 @@ namespace Product_Elective
                     string qty = "x" + (row.Cells["colQty"].Value?.ToString() ?? "");
                     string total = row.Cells["colTotal"].Value?.ToString() ?? "";
 
-                    // Truncate long names so the row stays clean
                     if (itemName.Length > 18)
                         itemName = itemName.Substring(0, 15) + "...";
 
@@ -512,7 +468,6 @@ namespace Product_Elective
                 print.printDisplayListbox.Items.Add("  " + new string('-', W + 2));
                 print.printDisplayListbox.Items.Add("");
 
-                // ── SUMMARY ───────────────────────────────────────────────────────
                 print.printDisplayListbox.Items.Add("  " + PadTwo("Subtotal:", "₱" + originalTotal.ToString("#,##0.00"), W));
                 print.printDisplayListbox.Items.Add("  " + PadTwo("Discount (" + (lastDiscountRate * 100) + "%):", "-₱" + discountAmount.ToString("#,##0.00"), W));
                 print.printDisplayListbox.Items.Add("  " + PadTwo("Discount Type:", discountLabel, W));
@@ -524,7 +479,6 @@ namespace Product_Elective
                 print.printDisplayListbox.Items.Add("  " + PadTwo("Change:", "₱" + change.ToString("#,##0.00"), W));
                 print.printDisplayListbox.Items.Add("  " + new string('-', W + 2));
 
-                // ── FOOTER ────────────────────────────────────────────────────────
                 print.printDisplayListbox.Items.Add("");
                 print.printDisplayListbox.Items.Add("       ★  Thank you for shopping!  ★");
                 print.printDisplayListbox.Items.Add("          Please come again soon.");
@@ -538,7 +492,6 @@ namespace Product_Elective
             }
         }
 
-        // ─── Helper: centers text inside a fixed width ────────────────────────────
         private string Center(string text, int width)
         {
             if (text.Length >= width) return text;
@@ -548,7 +501,6 @@ namespace Product_Elective
             return new string(' ', leftPadding) + text + new string(' ', rightPadding);
         }
 
-        // ─── Helper: left label + right value (two columns) ──────────────────────
         private string PadTwo(string label, string value, int width)
         {
             int spaces = width - label.Length - value.Length;
@@ -556,22 +508,14 @@ namespace Product_Elective
             return label + new string(' ', spaces) + value;
         }
 
-        // ─── Helper: three columns — item name, qty (center), total (right) ───────
         private string PadRow(string name, string qty, string total, int width)
         {
-            // Layout: [name][spaces][qty][spaces][total]
-            // Give name 18 chars, qty 5 chars, total fills the rest
             string namePart = name.PadRight(18);
             string qtyPart = qty.PadLeft(5);
             string totalPart = total.PadLeft(width - 18 - 5);
             return namePart + qtyPart + totalPart;
         }
 
-        // ─────────────────────────────────────────────────────────────────────────
-        // BUTTON EVENTS
-        // ─────────────────────────────────────────────────────────────────────────
-
-        // Set quantity before scanning
         private void button1_Click(object sender, EventArgs e)
         {
             Product_Elective.Quantity quantityForm = new Product_Elective.Quantity();
@@ -583,7 +527,6 @@ namespace Product_Elective
             }
         }
 
-        // Apply discount — no popup, totals update instantly on screen
         private void button9_Click(object sender, EventArgs e)
         {
             try
@@ -616,7 +559,6 @@ namespace Product_Elective
 
                 UpdateTotalPrice();
 
-                // Recalculate change if customer already paid
                 if (lastAmountPaid > 0)
                 {
                     string totalStr = priceTxtbox1.Text.Replace("₱", "").Replace(",", "").Trim();
@@ -631,7 +573,6 @@ namespace Product_Elective
             }
         }
 
-        // Process payment — no popup, stock NOT deducted yet
         private void Paymentbutton_Click_1(object sender, EventArgs e)
         {
             try
@@ -664,7 +605,6 @@ namespace Product_Elective
                     lastAmountPaid = paymentForm.AmountPaid;
                     lastChange = paymentForm.Change;
 
-                    // Show the change quietly on screen — no popup
                     textBox1.Text = "₱" + lastChange.ToString("#,##0.00");
                 }
             }
@@ -674,7 +614,6 @@ namespace Product_Elective
             }
         }
 
-        // Print receipt
         private void Printbutton_Click(object sender, EventArgs e)
         {
             try
@@ -699,12 +638,10 @@ namespace Product_Elective
             }
         }
 
-        // Save sale — stock is deducted HERE, then everything resets
         private void button13_Click(object sender, EventArgs e)
         {
             try
             {
-                // --- Original validation checks ---
                 if (OrderGridView.Rows.Count == 0)
                 {
                     MessageBox.Show("No items to save!");
@@ -717,11 +654,9 @@ namespace Product_Elective
                     return;
                 }
 
-                // --- Define date and time once for consistent timestamps ---
                 string dateToSave = DateTime.Now.ToString("M/d/yyyy");
                 string timeToSave = DateTime.Now.ToString("hh:mm tt");
 
-                // --- Save each order item to salesTbl (original logic) ---
                 foreach (DataGridViewRow row in OrderGridView.Rows)
                 {
                     string productId = row.Cells["colBarcode"].Value?.ToString();
@@ -733,20 +668,18 @@ namespace Product_Elective
                     productdb_connect.product_sqladapterInsert();
                 }
 
-                // --- New: Silent loyalty points update ---
                 if (!string.IsNullOrWhiteSpace(pendingLoyaltyCustomer))
                 {
-                    int points = OrderGridView.Rows.Count; // points = number of items bought
+                    int points = OrderGridView.Rows.Count; 
                     string cashierId = cashier_comboBox.SelectedItem.ToString();
 
-                    // Check if customer already exists
+              
                     productdb_connect.product_sql = "SELECT COUNT(*) FROM loyaltyTbl WHERE customer_name = '" + pendingLoyaltyCustomer + "'";
                     productdb_connect.product_cmd();
                     int exists = Convert.ToInt32(productdb_connect.product_sql_command.ExecuteScalar());
 
                     if (exists > 0)
                     {
-                        // Update existing customer
                         productdb_connect.product_sql = "UPDATE loyaltyTbl SET points = points + " + points +
                                                         ", cashier_id = '" + cashierId + "'" +
                                                         ", time_date = '" + dateToSave + " " + timeToSave + "'" +
@@ -756,17 +689,16 @@ namespace Product_Elective
                     }
                     else
                     {
-                        // Insert new customer
                         productdb_connect.product_sql = "INSERT INTO loyaltyTbl (customer_name, points, cashier_id, time_date) " +
                                                         "VALUES ('" + pendingLoyaltyCustomer + "', " + points + ", '" + cashierId + "', '" + dateToSave + " " + timeToSave + "')";
                         productdb_connect.product_cmd();
                         productdb_connect.product_sqladapterInsert();
                     }
 
-                    pendingLoyaltyCustomer = ""; // reset after use
+                    pendingLoyaltyCustomer = ""; 
                 }
 
-                // --- Deduct stock after sale is fully recorded ---
+
                 DeductStockFromDatabase();
 
                 MessageBox.Show("Sale saved successfully!");
@@ -778,7 +710,6 @@ namespace Product_Elective
             }
         }
 
-        // Add loyalty points
         private void button7_Click(object sender, EventArgs e)
         {
             if (OrderGridView.Rows.Count == 0)
@@ -799,7 +730,6 @@ namespace Product_Elective
 
             string customerName = loyaltyForm.CustomerName.Trim();
 
-            // Check if customer exists — show message here
             productdb_connect.product_sql = "SELECT COUNT(*) FROM loyaltyTbl WHERE customer_name = '" + customerName + "'";
             productdb_connect.product_cmd();
             int exists = Convert.ToInt32(productdb_connect.product_sql_command.ExecuteScalar());
@@ -809,22 +739,18 @@ namespace Product_Elective
             else
                 MessageBox.Show(customerName + " is a new customer! +1 point will be added.", "New Customer", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-            // Just remember the name — don't save yet
             pendingLoyaltyCustomer = customerName;
         }
 
-        // Open refund form
         private void button2_Click(object sender, EventArgs e)
         {
             Refund refundForm = new Refund();
             refundForm.ShowDialog();
         }
 
-        // Clear / Cancel buttons
         private void button5_Click(object sender, EventArgs e) { ClearAll(); }
         private void button3_Click(object sender, EventArgs e) { ClearAll(); }
 
-        // Remove selected row from the order grid
         private void button6_Click(object sender, EventArgs e)
         {
             if (OrderGridView.SelectedRows.Count > 0)
@@ -838,24 +764,21 @@ namespace Product_Elective
             }
         }
 
-        // Open cash drawer
         private void button11_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Cash drawer is now open!", "Drawer Open", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Cash drawer is now open!");
         }
 
-        // Hold transaction
         private void button4_Click(object sender, EventArgs e)
         {
             if (OrderGridView.Rows.Count == 0)
             {
-                MessageBox.Show("No active order to hold.", "Hold Transaction", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("No active order to hold.");
                 return;
             }
-            MessageBox.Show("Transaction has been put on hold.", "Transaction Held", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Transaction has been put on hold.");
         }
 
-        // Close the cashier window
         private void button10_Click(object sender, EventArgs e) { this.Close(); }
 
         private void OrderGridView_CellContentClick(object sender, DataGridViewCellEventArgs e) { }
@@ -878,6 +801,21 @@ namespace Product_Elective
         private void label14_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            ClearAll();
+        }
+
+        private void button5_Click_1(object sender, EventArgs e)
+        {
+            ClearAll();
+        }
+
+        private void button10_Click_1(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }

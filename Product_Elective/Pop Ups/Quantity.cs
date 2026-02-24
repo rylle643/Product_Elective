@@ -14,7 +14,7 @@ namespace Product_Elective
 
         private void Quantity_Load(object sender, EventArgs e)
         {
-            QuantitytextBox.Value = 1;  // NumericUpDown uses .Value not .Text
+            QuantitytextBox.Value = 1;
             QuantitytextBox.Focus();
         }
 

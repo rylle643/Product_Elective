@@ -378,6 +378,7 @@
             this.pnlWelcome.Name = "pnlWelcome";
             this.pnlWelcome.Size = new System.Drawing.Size(1954, 1021);
             this.pnlWelcome.TabIndex = 243;
+            this.pnlWelcome.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlWelcome_Paint);
             // 
             // pictureBox1
             // 

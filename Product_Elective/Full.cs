@@ -146,5 +146,10 @@ namespace Product_Elective
         {
 
         }
+
+        private void pnlWelcome_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

@@ -16,5 +16,10 @@ namespace Product_Elective
         {
             InitializeComponent();
         }
+
+        private void Receipt_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

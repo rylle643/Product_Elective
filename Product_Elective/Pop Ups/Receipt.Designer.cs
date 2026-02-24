@@ -76,6 +76,7 @@
             this.Controls.Add(this.printDisplayListbox);
             this.Name = "Receipt";
             this.Text = "Receipt";
+            this.Load += new System.EventHandler(this.Receipt_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

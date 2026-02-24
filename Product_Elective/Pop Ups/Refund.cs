@@ -22,7 +22,6 @@ namespace Product_Elective
             salesIdTextBox.Focus();
         }
 
-        // ─── SETUP GRID ───────────────────────────────────────────────────────────
         private void SetupGrid()
         {
             refundGrid.Columns.Clear();
@@ -74,14 +73,13 @@ namespace Product_Elective
             refundGrid.Columns["colTotal"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
         }
 
-        // ─── SEARCH BUTTON ────────────────────────────────────────────────────────
         private void button1_Click(object sender, EventArgs e)
         {
             string input = salesIdTextBox.Text.Trim();
 
-            if (string.IsNullOrWhiteSpace(input))
+            if (input == "")
             {
-                MessageBox.Show("Please enter a Sales ID to search.", "No Input", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please enter a Sales ID.");
                 salesIdTextBox.Focus();
                 return;
             }
@@ -107,7 +105,6 @@ namespace Product_Elective
                     return;
                 }
 
-                // Fill the grid and collect summary info at the same time
                 decimal grandTotal = 0;
                 string cashierId = "";
                 string paymentType = "";
@@ -118,7 +115,6 @@ namespace Product_Elective
                     decimal rowTotal = Convert.ToDecimal(row["total"]);
                     grandTotal += rowTotal;
 
-                    // Only grab summary info once from the first row
                     if (cashierId == "")
                     {
                         cashierId = row["cashier_id"].ToString();
@@ -137,18 +133,16 @@ namespace Product_Elective
                     );
                 }
 
-                // Populate the summary labels so cashier can verify before confirming
                 CashierLabel.Text = cashierId;
                 PaymentTypeLabel.Text = paymentType;
                 DiscountLabel.Text = discountType;
                 TotalRefundLabel.Text = "P" + grandTotal.ToString("#,##0.00");
 
-                // Check if already refunded
                 if (discountType.StartsWith("REFUNDED"))
                 {
                     statusLabel.Text = "This sale has already been refunded!";
                     statusLabel.ForeColor = Color.FromArgb(160, 50, 50);
-                    confirmButton.Enabled = false; // ← block the confirm button
+                    confirmButton.Enabled = false;
                     return;
                 }
 
@@ -158,16 +152,15 @@ namespace Product_Elective
             }
             catch (Exception)
             {
-                MessageBox.Show("Error searching for sale. Please contact your administrator.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error. Contact admin.");
             }
         }
 
-        // ─── CONFIRM REFUND ───────────────────────────────────────────────────────
         private void confirmButton_Click(object sender, EventArgs e)
         {
             if (refundGrid.Rows.Count == 0)
             {
-                MessageBox.Show("No sale loaded. Please search for a Sale ID first.", "No Sale", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("No sale loaded. Search for a Sale ID first.");
                 return;
             }
 
@@ -192,7 +185,6 @@ namespace Product_Elective
 
                 DataTable dt = productdb_connect.product_sql_dataset.Tables[0];
 
-                // Add back 1 unit per sale row to stock
                 foreach (DataRow row in dt.Rows)
                 {
                     string productId = row["product_id"].ToString();
@@ -202,43 +194,41 @@ namespace Product_Elective
                     productdb_connect.product_sqladapterUpdate();
                 }
 
-                // Mark the sale as refunded in the database
                 productdb_connect.product_sql = "UPDATE salesTbl SET discount_type = 'REFUNDED - ' + discount_type WHERE sale_id = '" + saleId + "'";
                 productdb_connect.product_cmd();
                 productdb_connect.product_sqladapterUpdate();
 
-                MessageBox.Show("Refund successful! Stock has been restored.", "Refund Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Refund successful! Stock has been restored.");
 
-                // Clear everything after a successful refund
                 refundGrid.Rows.Clear();
-                salesIdTextBox.Clear();
+                salesIdTextBox.Text = "";
                 statusLabel.Text = "";
                 confirmButton.Enabled = false;
-                ClearSummaryLabels();
+
+                CashierLabel.Text = "—";
+                PaymentTypeLabel.Text = "—";
+                DiscountLabel.Text = "—";
+                TotalRefundLabel.Text = "P0.00";
                 salesIdTextBox.Focus();
+
             }
             catch (Exception)
             {
-                MessageBox.Show("Error processing refund. Please contact your administrator.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Error. Contact admin.");
             }
         }
 
-        // ─── CANCEL BUTTON ────────────────────────────────────────────────────────
         private void button2_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        // ─── ENTER KEY IN SEARCH BOX ──────────────────────────────────────────────
-        // IMPORTANT: In the designer, hook this to the KeyDown event of salesIdTextBox
-        //            NOT TextChanged — KeyDown gives you KeyEventArgs with KeyCode
         private void salesIdTextBox_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
                 button1_Click(sender, e);
         }
 
-        // ─── HELPER: resets summary labels to empty/default state ─────────────────
         private void ClearSummaryLabels()
         {
             CashierLabel.Text = "—";
