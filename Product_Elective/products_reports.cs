@@ -20,7 +20,6 @@ namespace Product_Elective
             productdb_connect.product_connString();
             InitializeComponent();
         }
-
         private void StyleDataGridView()
         {
             dataGridView1.BorderStyle = BorderStyle.None;
@@ -39,7 +38,6 @@ namespace Product_Elective
             dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
             dataGridView1.EnableHeadersVisualStyles = false;
 
-            // ── Column Header ────────────────────────────────────────────────────
             dataGridView1.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(160, 50, 90);
             dataGridView1.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
             dataGridView1.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI Semibold", 11.5F, FontStyle.Bold);
@@ -48,20 +46,18 @@ namespace Product_Elective
             dataGridView1.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(160, 50, 90);
             dataGridView1.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.White;
 
-            // ── Even Rows ────────────────────────────────────────────────────────
             dataGridView1.DefaultCellStyle.BackColor = Color.White;
             dataGridView1.DefaultCellStyle.ForeColor = Color.FromArgb(30, 10, 20);
             dataGridView1.DefaultCellStyle.Font = new Font("Segoe UI", 11F);
-            dataGridView1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;   // DEFAULT = LEFT
+            dataGridView1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridView1.DefaultCellStyle.SelectionBackColor = Color.FromArgb(180, 70, 110);
             dataGridView1.DefaultCellStyle.SelectionForeColor = Color.White;
             dataGridView1.DefaultCellStyle.Padding = new Padding(8, 0, 5, 0);
 
-            // ── Odd Rows ─────────────────────────────────────────────────────────
             dataGridView1.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 240, 242);
             dataGridView1.AlternatingRowsDefaultCellStyle.ForeColor = Color.FromArgb(30, 10, 20);
             dataGridView1.AlternatingRowsDefaultCellStyle.Font = new Font("Segoe UI", 11F);
-            dataGridView1.AlternatingRowsDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;   // DEFAULT = LEFT
+            dataGridView1.AlternatingRowsDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             dataGridView1.AlternatingRowsDefaultCellStyle.SelectionBackColor = Color.FromArgb(180, 70, 110);
             dataGridView1.AlternatingRowsDefaultCellStyle.SelectionForeColor = Color.White;
         }
@@ -70,7 +66,7 @@ namespace Product_Elective
         {
             foreach (DataGridViewColumn col in dataGridView1.Columns)
             {
-                col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+                col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
                 switch (col.Name)
                 {
@@ -89,16 +85,9 @@ namespace Product_Elective
                 }
             }
 
-            string[] leftAlignCols = { "product_name", "description", "brand", "category", "unit", "productid", "date_added", "date_expiration" };
-            foreach (string colName in leftAlignCols)
-                if (dataGridView1.Columns.Contains(colName))
-                    dataGridView1.Columns[colName].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-
-            // Numeric columns — MiddleLeft as requested
-            if (dataGridView1.Columns.Contains("price"))
-                dataGridView1.Columns["price"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            if (dataGridView1.Columns.Contains("quantity"))
-                dataGridView1.Columns["quantity"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            // All columns centered
+            foreach (DataGridViewColumn col in dataGridView1.Columns)
+                col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
             // Format price column with ₱ sign
             if (dataGridView1.Columns.Contains("price"))

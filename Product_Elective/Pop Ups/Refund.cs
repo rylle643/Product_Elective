@@ -40,14 +40,12 @@ namespace Product_Elective
             refundGrid.GridColor = Color.FromArgb(200, 180, 190);
             refundGrid.BorderStyle = BorderStyle.None;
 
-            // Header style
             refundGrid.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(160, 50, 90);
             refundGrid.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
             refundGrid.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI Semibold", 11F, FontStyle.Bold);
             refundGrid.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
             refundGrid.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(160, 50, 90);
 
-            // Cell style
             refundGrid.DefaultCellStyle.BackColor = Color.White;
             refundGrid.DefaultCellStyle.ForeColor = Color.FromArgb(30, 10, 20);
             refundGrid.DefaultCellStyle.Font = new Font("Segoe UI", 10.5F);
@@ -55,22 +53,21 @@ namespace Product_Elective
             refundGrid.DefaultCellStyle.SelectionForeColor = Color.White;
             refundGrid.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
 
-            // Alternating rows
             refundGrid.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(245, 240, 242);
             refundGrid.AlternatingRowsDefaultCellStyle.ForeColor = Color.FromArgb(30, 10, 20);
             refundGrid.AlternatingRowsDefaultCellStyle.SelectionBackColor = Color.FromArgb(180, 70, 110);
             refundGrid.AlternatingRowsDefaultCellStyle.SelectionForeColor = Color.White;
 
-            // Columns
             refundGrid.Columns.Add(new DataGridViewTextBoxColumn { Name = "colSaleId", HeaderText = "Sale ID", Width = 80 });
             refundGrid.Columns.Add(new DataGridViewTextBoxColumn { Name = "colProductId", HeaderText = "Barcode", Width = 130 });
             refundGrid.Columns.Add(new DataGridViewTextBoxColumn { Name = "colName", HeaderText = "Product Name", AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill });
+            refundGrid.Columns.Add(new DataGridViewTextBoxColumn { Name = "colQty", HeaderText = "Qty", Width = 80 });
             refundGrid.Columns.Add(new DataGridViewTextBoxColumn { Name = "colTotal", HeaderText = "Total (P)", Width = 120 });
             refundGrid.Columns.Add(new DataGridViewTextBoxColumn { Name = "colDiscount", HeaderText = "Discount", Width = 120 });
             refundGrid.Columns.Add(new DataGridViewTextBoxColumn { Name = "colPayment", HeaderText = "Payment", Width = 100 });
             refundGrid.Columns.Add(new DataGridViewTextBoxColumn { Name = "colDate", HeaderText = "Date & Time", Width = 150 });
-
-            refundGrid.Columns["colTotal"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            refundGrid.Columns["colTotal"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            refundGrid.Columns["colQty"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -79,14 +76,14 @@ namespace Product_Elective
 
             if (input == "")
             {
-                MessageBox.Show("Please enter a Sales ID.");
+                MessageBox.Show("Please enter a Transaction ID.");
                 salesIdTextBox.Focus();
                 return;
             }
 
             try
             {
-                productdb_connect.product_sql = "SELECT * FROM salesTbl WHERE sale_id = '" + input + "'";
+                productdb_connect.product_sql = "SELECT * FROM salesTbl WHERE transaction_id = '" + input + "'";
                 productdb_connect.product_cmd();
                 productdb_connect.product_sqladapterSelect();
                 productdb_connect.product_sqldatasetSELECT();
@@ -126,11 +123,12 @@ namespace Product_Elective
                         row["sale_id"].ToString(),
                         row["product_id"].ToString(),
                         row["product_name"].ToString(),
+                        row["quantity"].ToString(),
                         "P" + rowTotal.ToString("#,##0.00"),
                         row["discount_type"].ToString(),
                         row["payment_type"].ToString(),
                         row["time_date"].ToString()
-                    );
+                     );
                 }
 
                 CashierLabel.Text = cashierId;
@@ -140,13 +138,13 @@ namespace Product_Elective
 
                 if (discountType.StartsWith("REFUNDED"))
                 {
-                    statusLabel.Text = "This sale has already been refunded!";
+                    statusLabel.Text = "This transaction has already been refunded!";
                     statusLabel.ForeColor = Color.FromArgb(160, 50, 50);
                     confirmButton.Enabled = false;
                     return;
                 }
 
-                statusLabel.Text = "Sale found - " + dt.Rows.Count + " item(s). Click CONFIRM REFUND to proceed.";
+                statusLabel.Text = "Transaction found - " + dt.Rows.Count + " item(s). Click CONFIRM REFUND to proceed.";
                 statusLabel.ForeColor = Color.FromArgb(30, 120, 50);
                 confirmButton.Enabled = true;
             }
@@ -160,25 +158,15 @@ namespace Product_Elective
         {
             if (refundGrid.Rows.Count == 0)
             {
-                MessageBox.Show("No sale loaded. Search for a Sale ID first.");
+                MessageBox.Show("No transaction loaded. Search for a Transaction ID first.");
                 return;
             }
 
-            DialogResult confirm = MessageBox.Show(
-                "Are you sure you want to refund this sale?\nThis will add the quantities back to stock.",
-                "Confirm Refund",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question
-            );
-
-            if (confirm != DialogResult.Yes)
-                return;
-
             try
             {
-                string saleId = salesIdTextBox.Text.Trim();
+                string transactionId = salesIdTextBox.Text.Trim();
 
-                productdb_connect.product_sql = "SELECT product_id FROM salesTbl WHERE sale_id = '" + saleId + "'";
+                productdb_connect.product_sql = "SELECT product_id, quantity FROM salesTbl WHERE transaction_id = '" + transactionId + "'";
                 productdb_connect.product_cmd();
                 productdb_connect.product_sqladapterSelect();
                 productdb_connect.product_sqldatasetSELECT();
@@ -188,17 +176,18 @@ namespace Product_Elective
                 foreach (DataRow row in dt.Rows)
                 {
                     string productId = row["product_id"].ToString();
+                    int qty = Convert.ToInt32(row["quantity"]);
 
-                    productdb_connect.product_sql = "UPDATE productTbl SET quantity = quantity + 1 WHERE productid = '" + productId + "'";
+                    productdb_connect.product_sql = "UPDATE productTbl SET quantity = quantity + " + qty + " WHERE productid = '" + productId + "'";
                     productdb_connect.product_cmd();
                     productdb_connect.product_sqladapterUpdate();
                 }
 
-                productdb_connect.product_sql = "UPDATE salesTbl SET discount_type = 'REFUNDED - ' + discount_type WHERE sale_id = '" + saleId + "'";
+                productdb_connect.product_sql = "UPDATE salesTbl SET discount_type = 'REFUNDED - ' + discount_type WHERE transaction_id = '" + transactionId + "'";
                 productdb_connect.product_cmd();
                 productdb_connect.product_sqladapterUpdate();
 
-                MessageBox.Show("Refund successful! Stock has been restored.");
+                MessageBox.Show("Refund successful! Stock has been restored to all item(s).");
 
                 refundGrid.Rows.Clear();
                 salesIdTextBox.Text = "";
@@ -210,7 +199,6 @@ namespace Product_Elective
                 DiscountLabel.Text = "—";
                 TotalRefundLabel.Text = "P0.00";
                 salesIdTextBox.Focus();
-
             }
             catch (Exception)
             {
@@ -235,6 +223,11 @@ namespace Product_Elective
             PaymentTypeLabel.Text = "—";
             DiscountLabel.Text = "—";
             TotalRefundLabel.Text = "P0.00";
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

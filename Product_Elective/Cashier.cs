@@ -88,8 +88,6 @@ namespace Product_Elective
             OrderGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "colQty", HeaderText = "Qty", Width = 90 });
             OrderGridView.Columns.Add(new DataGridViewTextBoxColumn { Name = "colTotal", HeaderText = "Total (₱)", Width = 150 });
 
-            OrderGridView.Columns["colPrice"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-            OrderGridView.Columns["colTotal"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
         }
 
         private void SearchtextBox_GotFocus(object sender, EventArgs e)
@@ -657,50 +655,49 @@ namespace Product_Elective
                 string dateToSave = DateTime.Now.ToString("M/d/yyyy");
                 string timeToSave = DateTime.Now.ToString("hh:mm tt");
 
+                // Get one shared transaction_id for all items in this order
+                productdb_connect.product_sql = "SELECT ISNULL(MAX(transaction_id), 0) + 1 FROM salesTbl";
+                productdb_connect.product_cmd();
+                int transactionId = Convert.ToInt32(productdb_connect.product_sql_command.ExecuteScalar());
+
                 foreach (DataGridViewRow row in OrderGridView.Rows)
                 {
                     string productId = row.Cells["colBarcode"].Value?.ToString();
                     string productName = row.Cells["colName"].Value?.ToString();
                     string total = row.Cells["colTotal"].Value?.ToString().Replace("₱", "").Replace(",", "").Trim();
+                    string qty = row.Cells["colQty"].Value?.ToString();
 
-                    productdb_connect.product_sql = "INSERT INTO salesTbl (product_id, product_name, total, discount_type, payment_type, amount_paid, change_amount, cashier_id, time_date) VALUES ('" + productId + "', '" + productName + "', '" + total + "', '" + lastDiscountType + "', '" + lastPaymentType + "', '" + lastAmountPaid + "', '" + lastChange + "', '" + cashier_comboBox.SelectedItem.ToString() + "', '" + dateToSave + " " + timeToSave + "')";
+                    productdb_connect.product_sql = "INSERT INTO salesTbl (product_id, product_name, quantity, total, discount_type, payment_type, amount_paid, change_amount, cashier_id, time_date, transaction_id) VALUES ('" + productId + "', '" + productName + "', '" + qty + "', '" + total + "', '" + lastDiscountType + "', '" + lastPaymentType + "', '" + lastAmountPaid + "', '" + lastChange + "', '" + cashier_comboBox.SelectedItem.ToString() + "', '" + dateToSave + " " + timeToSave + "', " + transactionId + ")";
                     productdb_connect.product_cmd();
                     productdb_connect.product_sqladapterInsert();
                 }
 
                 if (!string.IsNullOrWhiteSpace(pendingLoyaltyCustomer))
                 {
-                    int points = OrderGridView.Rows.Count; 
+                    int points = OrderGridView.Rows.Count;
                     string cashierId = cashier_comboBox.SelectedItem.ToString();
 
-              
                     productdb_connect.product_sql = "SELECT COUNT(*) FROM loyaltyTbl WHERE customer_name = '" + pendingLoyaltyCustomer + "'";
                     productdb_connect.product_cmd();
                     int exists = Convert.ToInt32(productdb_connect.product_sql_command.ExecuteScalar());
 
                     if (exists > 0)
                     {
-                        productdb_connect.product_sql = "UPDATE loyaltyTbl SET points = points + " + points +
-                                                        ", cashier_id = '" + cashierId + "'" +
-                                                        ", time_date = '" + dateToSave + " " + timeToSave + "'" +
-                                                        " WHERE customer_name = '" + pendingLoyaltyCustomer + "'";
+                        productdb_connect.product_sql = "UPDATE loyaltyTbl SET points = points + " + points + ", cashier_id = '" + cashierId + "', time_date = '" + dateToSave + " " + timeToSave + "' WHERE customer_name = '" + pendingLoyaltyCustomer + "'";
                         productdb_connect.product_cmd();
                         productdb_connect.product_sqladapterUpdate();
                     }
                     else
                     {
-                        productdb_connect.product_sql = "INSERT INTO loyaltyTbl (customer_name, points, cashier_id, time_date) " +
-                                                        "VALUES ('" + pendingLoyaltyCustomer + "', " + points + ", '" + cashierId + "', '" + dateToSave + " " + timeToSave + "')";
+                        productdb_connect.product_sql = "INSERT INTO loyaltyTbl (customer_name, points, cashier_id, time_date) VALUES ('" + pendingLoyaltyCustomer + "', " + points + ", '" + cashierId + "', '" + dateToSave + " " + timeToSave + "')";
                         productdb_connect.product_cmd();
                         productdb_connect.product_sqladapterInsert();
                     }
 
-                    pendingLoyaltyCustomer = ""; 
+                    pendingLoyaltyCustomer = "";
                 }
 
-
                 DeductStockFromDatabase();
-
                 MessageBox.Show("Sale saved successfully!");
                 ClearAll();
             }
